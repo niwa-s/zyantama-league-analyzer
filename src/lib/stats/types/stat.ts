@@ -37,6 +37,7 @@ export type GameMetadata = {
   ranks: number[];
   finalScores: number[];
   teamPoints: number[];
+  accountIds: string[];
 };
 type KyokuState = {
   kyoku?: string;
@@ -53,7 +54,9 @@ export type GameResultByPlayer = {
 
 // 参考 https://github.com/Equim-chan/Mortal/blob/main/libriichi/src/stat.rs
 class Stat {
+  playerId: string;
   playerName: string;
+  playerNameUpdatedAt: number;
   game: number;
   round: number;
   oya: number;
@@ -111,7 +114,11 @@ class Stat {
   gameResultStore: Map<string, GameResultByPlayer[]>;
 
   constructor() {
+    this.playerId = "";
     this.playerName = "";
+    // 古い日付であれば何でもいいが、この数字は-271,821年の4月20日を表しているらしい
+    // https://stackoverflow.com/questions/11526504/minimum-and-maximum-date
+    this.playerNameUpdatedAt = 0;
     this.game = 0;
     this.round = 0;
     this.oya = 0;
@@ -192,9 +199,13 @@ class Stat {
       if (type === "startGame") {
         uuid = event.uuid;
       } else if (type === "startKyoku") {
-        const { oya, scores, bakaze, kyotaku, kyoku, honba, playerNames } = event;
+        const { oya, scores, bakaze, kyotaku, kyoku, honba, playerNames, accountIds, unixTimestamp } = event;
         this.round++;
-        this.playerName = playerNames[player_id];
+        if (this.playerName !== playerNames[player_id] && this.playerNameUpdatedAt < unixTimestamp) {
+          this.playerName = playerNames[player_id];
+          this.playerNameUpdatedAt = unixTimestamp;
+        }
+        this.playerId = accountIds[player_id];
 
         curScores = [...scores];
         curKyotaku = kyotaku;
