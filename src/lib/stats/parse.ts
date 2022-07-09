@@ -54,6 +54,7 @@ function ConvertToMjaiFormat(mjsoulPaifu: any): [Event[], GameMetadata] {
   let finalScores: ArrayOfLength<4, number> = [0, 0, 0, 0];
   let ranks: ArrayOfLength<4, number> = [0, 0, 0, 0];
   let playerNames = accountsInfo.map((account: any) => account.nickname);
+  let accountIds = accountsInfo.map((account: any) => account.account_id)
   gameResult.players.forEach((player: any, rank: number) => {
     finalScores[player.seat] = player.part_point_1;
     ranks[player.seat] = rank;
@@ -73,6 +74,7 @@ function ConvertToMjaiFormat(mjsoulPaifu: any): [Event[], GameMetadata] {
       finalScores,
       mjsoulPaifu.head.config.mode.detail_rule
     ),
+    accountIds
   };
   events.push({
     type: "startGame",
@@ -119,6 +121,8 @@ function ConvertToMjaiFormat(mjsoulPaifu: any): [Event[], GameMetadata] {
         scores: data.scores,
         tehais: tehais,
         playerNames: playerNames,
+        accountIds,
+        unixTimestamp: Number(mjsoulPaifu.head.start_time)
       });
     } else if (name === ".lq.RecordDealTile") {
       if (data.liqi) {

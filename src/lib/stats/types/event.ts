@@ -19,6 +19,8 @@ type StartKyoku = {
   scores: ArrayOfLength<4, number>;
   tehais: ArrayOfLength<4, TileStr[]>;
   playerNames: ArrayOfLength<4, string>;
+  accountIds: ArrayOfLength<4, string>;
+  unixTimestamp: number;
 }
 
 type Tsumo = {
