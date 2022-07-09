@@ -28,16 +28,16 @@ function reducer(state: PlayerInfoType, action: PlayerInfoActionType): PlayerInf
   switch (action.type) {
     case "UPDATE_PLAYER_STATS":
       let { playerId, events, metadata } = action.payload;
-      let playerName = metadata.playerNames[playerId];
+      let accountId = metadata.accountIds[playerId];
       let playerInfo = null;
-      if (!state[playerName]) {
-        console.log("new player:", playerName);
+      if (!state[accountId]) {
+        console.log("new player:", accountId);
         playerInfo = {
           stat: new Stat(),
           uuids: [],
         };
       } else {
-        playerInfo = state[playerName];
+        playerInfo = state[accountId];
       }
       if (!playerInfo.uuids.includes(metadata.uuid)) {
         console.log("new data:", metadata.uuid);
@@ -45,7 +45,7 @@ function reducer(state: PlayerInfoType, action: PlayerInfoActionType): PlayerInf
         playerInfo.uuids.push(metadata.uuid);
         return {
           ...state,
-          [playerName]: {
+          [accountId]: {
             stat: playerInfo.stat,
             uuids: [...playerInfo.uuids],
           },

@@ -1,9 +1,8 @@
 import assert, { ok } from "assert";
-import { ArrayOfLength } from "../../types/utils.js";
+import { ArrayOfLength } from "../utils.js";
 import Event from "./types/event.js";
+import { GameMetadata } from "./types/stat.js";
 import { Tile, TileStr } from "./types/tile";
-import { GameMetadata } from "./types/stat";
-import * as util from 'util'
 /*
 export const readFromFilePath = (filePath: string) => {
   let json = JSON.parse(fs.readFileSync(filePath, { encoding: 'utf-8' }))
@@ -55,6 +54,7 @@ function ConvertToMjaiFormat(mjsoulPaifu: any): [Event[], GameMetadata] {
   let finalScores: ArrayOfLength<4, number> = [0, 0, 0, 0];
   let ranks: ArrayOfLength<4, number> = [0, 0, 0, 0];
   let playerNames = accountsInfo.map((account: any) => account.nickname);
+  let accountIds = accountsInfo.map((account: any) => account.account_id)
   gameResult.players.forEach((player: any, rank: number) => {
     finalScores[player.seat] = player.part_point_1;
     ranks[player.seat] = rank;
@@ -74,6 +74,7 @@ function ConvertToMjaiFormat(mjsoulPaifu: any): [Event[], GameMetadata] {
       finalScores,
       mjsoulPaifu.head.config.mode.detail_rule
     ),
+    accountIds
   };
   events.push({
     type: "startGame",
@@ -120,6 +121,8 @@ function ConvertToMjaiFormat(mjsoulPaifu: any): [Event[], GameMetadata] {
         scores: data.scores,
         tehais: tehais,
         playerNames: playerNames,
+        accountIds,
+        unixTimestamp: Number(mjsoulPaifu.head.start_time)
       });
     } else if (name === ".lq.RecordDealTile") {
       if (data.liqi) {
@@ -303,7 +306,7 @@ ${JSON.stringify(data)}`
       console.log(`unknown name: ${name}`);
     }
   }
-  console.log(util.inspect(events, { showHidden: false, depth: null, colors: false, maxArrayLength: null }))
+  //console.log(util.inspect(events, { showHidden: false, depth: null, colors: false, maxArrayLength: null }))
   //console.log(JSON.stringify(events));
 
   return [events, gameMetadata];
