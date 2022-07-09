@@ -1,9 +1,8 @@
 import assert, { ok } from "assert";
-import { ArrayOfLength } from "../../types/utils.js";
+import { ArrayOfLength } from "../utils.js";
 import Event from "./types/event.js";
+import { GameMetadata } from "./types/stat.js";
 import { Tile, TileStr } from "./types/tile";
-import { GameMetadata } from "./types/stat";
-import * as util from 'util'
 /*
 export const readFromFilePath = (filePath: string) => {
   let json = JSON.parse(fs.readFileSync(filePath, { encoding: 'utf-8' }))
@@ -303,7 +302,7 @@ ${JSON.stringify(data)}`
       console.log(`unknown name: ${name}`);
     }
   }
-  console.log(util.inspect(events, { showHidden: false, depth: null, colors: false, maxArrayLength: null }))
+  //console.log(util.inspect(events, { showHidden: false, depth: null, colors: false, maxArrayLength: null }))
   //console.log(JSON.stringify(events));
 
   return [events, gameMetadata];
