@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# テスト用の牌譜データ
+/siniki-paifu
+
 # dependencies
 /node_modules
 /.pnp

@@ -1,0 +1,12 @@
+# 参考: https://qiita.com/manten120/items/87e9e822800403904dc8
+name: github pages
+
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-18.04
