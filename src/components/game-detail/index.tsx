@@ -11,8 +11,8 @@ export function GameDetail({ UUID }: Props) {
   const { gstoreState, gstoreDispatch } = useContext(GameInfoStoreContext)
   const { pinfoState, pinfoDispatch } = useContext(PlayerInfoContext)
   const gameInfo = gstoreState.info.find(({metadata}) => metadata.uuid === UUID)!
-  const playerResults = gameInfo.metadata.playerNames.map(playerName => (
-    pinfoState[playerName].stat.gameResultStore.get(UUID)!
+  const playerResults = gameInfo.metadata.accountIds.map(accountId => (
+    pinfoState[accountId].stat.gameResultStore.get(UUID)!
   ))
   return (
     <div className="container">
