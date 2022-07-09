@@ -306,8 +306,8 @@ ${JSON.stringify(data)}`
       console.log(`unknown name: ${name}`);
     }
   }
-  // console.log(util.inspect(events, { showHidden: false, depth: null, colors: false, maxArrayLength: null }))
-  // console.log(JSON.stringify(events));
+  //console.log(util.inspect(events, { showHidden: false, depth: null, colors: false, maxArrayLength: null }))
+  //console.log(JSON.stringify(events));
 
   return [events, gameMetadata];
 }
