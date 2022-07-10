@@ -11,11 +11,11 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useContext, useState } from "react";
+import { useRecoilValue } from "recoil";
 import { classNames } from "../lib/class-names";
 import { Stat } from "../lib/stats";
-import { GameMetadata, GameResultByPlayer } from "../lib/stats/types/stat";
 import { toPercentFormat } from "../lib/stats/utils";
-import { PlayerInfoContext } from "@/lib/playerInfoProvider";
+import { playerInfoAtom } from "@/lib/playerInfo/atoms";
 
 const columns: ColumnDef<Stat>[] = [
   {
@@ -119,10 +119,10 @@ const columns: ColumnDef<Stat>[] = [
 ];
 
 function StatsTable() {
-  const { pinfoState } = useContext(PlayerInfoContext);
+  const  playerInfo = useRecoilValue(playerInfoAtom)
   const [sorting, setSorting] = useState<SortingState>([]);
   const [data, setData] = useState(() =>
-    Object.entries(pinfoState).map(([_, playerInfo]) => playerInfo.stat)
+    Object.entries(playerInfo).map(([_, s]) => s.stat)
   );
   const table = useReactTable({
     data,

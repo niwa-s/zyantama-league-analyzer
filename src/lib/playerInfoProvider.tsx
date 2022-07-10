@@ -41,7 +41,7 @@ function reducer(state: PlayerInfoType, action: PlayerInfoActionType): PlayerInf
       }
       if (!playerInfo.uuids.includes(metadata.uuid)) {
         console.log("new data:", metadata.uuid);
-        playerInfo.stat.updateFromEvents(events, playerId);
+        playerInfo.stat = Stat.updateFromEvents(playerInfo.stat, events, playerId);
         playerInfo.uuids.push(metadata.uuid);
         return {
           ...state,

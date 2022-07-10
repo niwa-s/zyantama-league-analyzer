@@ -1,18 +1,18 @@
 import "../../styles/globals.css";
 import type { AppProps } from "next/app";
+import { RecoilRoot } from "recoil";
 import Layout from "@/components/layout";
-import { PaifuStoreProvider } from "@/lib/gameInfoProvider";
 import { PlayerInfoProvider } from "@/lib/playerInfoProvider";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <PlayerInfoProvider>
-      <PaifuStoreProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </PaifuStoreProvider>
-    </PlayerInfoProvider>
+    <RecoilRoot>
+      <PlayerInfoProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+      </PlayerInfoProvider>
+    </RecoilRoot>
   );
 }
 

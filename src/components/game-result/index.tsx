@@ -1,16 +1,24 @@
 import { TrashIcon } from "@heroicons/react/solid";
 import { useContext, useState } from "react";
+import { useRecoilValue } from "recoil";
 import FileInputField from "../fileinput-field";
 import { GameDetail } from "../game-detail";
-import { GameInfoStoreContext } from "@/lib/gameInfoProvider";
+import { useAddPaifu, useToggleShowGameDetail } from "@/lib/gameInfo/operations";
+import { gameInfoState } from "@/lib/gameInfo/selectors";
+import { playerInfoAtom } from "@/lib/playerInfo/atoms";
+import { useUpdatePlayerStats } from "@/lib/playerInfo/operations";
 import { PlayerInfoContext } from "@/lib/playerInfoProvider";
 import { ConvertToMjaiFormat } from "@/lib/stats";
 
 export function GameResult() {
-  const { pinfoDispatch, pinfoState } = useContext(PlayerInfoContext);
-  const { gstoreDispatch, gstoreState } = useContext(GameInfoStoreContext);
-  console.log("pstorestate:", gstoreState);
-  const handleFileChange = async (
+  //const { pinfoDispatch, pinfoState } = useContext(PlayerInfoContext);
+  const playerInfo = useRecoilValue(playerInfoAtom);
+  const updatePlayerStats = useUpdatePlayerStats()
+  const addPaifu = useAddPaifu()
+  const toggleShowGameDetail = useToggleShowGameDetail()
+  const gameInfo = useRecoilValue(gameInfoState);
+  console.log("pstorestate:", playerInfo);
+  const useHandleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const target = event.currentTarget as HTMLInputElement;
@@ -18,12 +26,11 @@ export function GameResult() {
     for (const file of Object.values(files)) {
       const text = await file.text();
       const [events, metadata] = ConvertToMjaiFormat(JSON.parse(text));
-      gstoreDispatch({
-        type: "ADD_PAIFU",
-        payload: metadata,
-      });
+      addPaifu(metadata);
       for (const playerId of [0, 1, 2, 3]) {
         console.log("add player:", metadata.playerNames[playerId]);
+        updatePlayerStats(playerId, events, metadata);
+        /*
         pinfoDispatch({
           type: "UPDATE_PLAYER_STATS",
           payload: {
@@ -31,11 +38,11 @@ export function GameResult() {
             events,
             metadata,
           },
-        });
+        });*/
       }
     }
   };
-  console.log(pinfoState);
+  //console.log(pinfoState);
   return (
     <div className="w-full">
       <table className="w-full">
@@ -45,7 +52,7 @@ export function GameResult() {
             <th>プレイヤー</th>
           </tr>
         </thead>
-        {gstoreState.info.map(({ metadata, showDetail }) => (
+        {gameInfo.map(({ metadata, showDetail }) => (
           <tbody key={metadata.uuid}>
             <tr
               className="border-b text-left"
@@ -62,10 +69,7 @@ export function GameResult() {
               <td>
                 <button
                   onClick={() => {
-                    gstoreDispatch({
-                      type: "TOGGLE_SHOW_DETAIL",
-                      payload: { uuid: metadata.uuid },
-                    });
+                    toggleShowGameDetail(metadata.uuid)
                   }}
                 >
                   詳細ページ
@@ -88,7 +92,7 @@ export function GameResult() {
           </tbody>
         ))}
       </table>
-      <FileInputField onChange={handleFileChange}></FileInputField>
+      <FileInputField onChange={useHandleFileChange}></FileInputField>
     </div>
   );
 }
