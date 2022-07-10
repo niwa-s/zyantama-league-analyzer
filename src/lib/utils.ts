@@ -9,3 +9,6 @@ export type { ArrayOfLength };
 //
 // 参考: https://zenn.dev/warabi/articles/2521222d57a71f
 export type UiState<T extends { status: string } & Record<string, unknown>> = T;
+
+export const classNames = (...classes: (string | undefined | boolean | null)[]) =>
+  classes.filter(Boolean).join(" ");
