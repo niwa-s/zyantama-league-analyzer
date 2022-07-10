@@ -1,10 +1,10 @@
-import { Stat } from "../stats"
+import { Stat } from "../stats";
 
 export type PlayerInfo = {
-    stat: Stat;
-    uuids: string[];
-}
+  stat: Stat;
+  uuids: string[];
+};
 
 export type PlayerInfoAtom = {
-    [x: string]: PlayerInfo
-}
+  [x: string]: PlayerInfo;
+};

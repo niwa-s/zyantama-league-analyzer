@@ -453,7 +453,7 @@ class Stat {
         stat.gameResultStore.set(uuid, gameResult);
       }
     }
-    return stat
+    return stat;
   }
 
   #totalPt(points: number[]) {

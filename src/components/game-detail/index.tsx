@@ -11,11 +11,11 @@ type Props = {
 };
 export function GameDetail({ UUID }: Props) {
   const gameInfo = useRecoilValue(gameInfoByUuid(UUID));
-  console.log("gameInfo:", gameInfo)
+  console.log("gameInfo:", gameInfo);
   const playerResults = useRecoilValue(
     GameDetailByUuidState({ UUID, accountIds: gameInfo.metadata.accountIds }),
   );
-  console.log("playerResults: ", playerResults)
+  console.log("playerResults: ", playerResults);
   return (
     <div className="container">
       <ScoreLineChart metadata={gameInfo.metadata} playerResults={playerResults} />

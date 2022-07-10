@@ -6,7 +6,9 @@ export const useAddPaifu = () =>
   useRecoilCallback(({ set }) => (metadata: GameMetadata) => {
     set(gameInfoAtom, (prev) =>
       prev.findIndex((gameInfo) => gameInfo.metadata.uuid === metadata.uuid) === -1
-        ? [...prev, { metadata, showDetail: false }]
+        ? [...prev, { metadata, showDetail: false }].sort((a, b) =>
+            a.metadata.timestamp > b.metadata.timestamp ? -1 : 1,
+          )
         : prev,
     );
   });

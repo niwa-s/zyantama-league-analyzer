@@ -1,5 +1,4 @@
 import { TrashIcon } from "@heroicons/react/solid";
-import { useContext, useState } from "react";
 import { useRecoilValue } from "recoil";
 import FileInputField from "../fileinput-field";
 import { GameDetail } from "../game-detail";
@@ -7,20 +6,17 @@ import { useAddPaifu, useToggleShowGameDetail } from "@/lib/gameInfo/operations"
 import { gameInfoState } from "@/lib/gameInfo/selectors";
 import { playerInfoAtom } from "@/lib/playerInfo/atoms";
 import { useUpdatePlayerStats } from "@/lib/playerInfo/operations";
-import { PlayerInfoContext } from "@/lib/playerInfoProvider";
 import { ConvertToMjaiFormat } from "@/lib/stats";
 
 export function GameResult() {
   //const { pinfoDispatch, pinfoState } = useContext(PlayerInfoContext);
   const playerInfo = useRecoilValue(playerInfoAtom);
-  const updatePlayerStats = useUpdatePlayerStats()
-  const addPaifu = useAddPaifu()
-  const toggleShowGameDetail = useToggleShowGameDetail()
+  const updatePlayerStats = useUpdatePlayerStats();
+  const addPaifu = useAddPaifu();
+  const toggleShowGameDetail = useToggleShowGameDetail();
   const gameInfo = useRecoilValue(gameInfoState);
   console.log("pstorestate:", playerInfo);
-  const useHandleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const useHandleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.currentTarget as HTMLInputElement;
     const files = target.files!;
     for (const file of Object.values(files)) {
@@ -54,10 +50,7 @@ export function GameResult() {
         </thead>
         {gameInfo.map(({ metadata, showDetail }) => (
           <tbody key={metadata.uuid}>
-            <tr
-              className="border-b text-left"
-              key={"game-result" + metadata.uuid}
-            >
+            <tr className="border-b text-left" key={"game-result" + metadata.uuid}>
               <td className="">{metadata.day}</td>
               <td className="flex flex-wrap">
                 {metadata.playerNames.map((playerName) => (
@@ -69,7 +62,7 @@ export function GameResult() {
               <td>
                 <button
                   onClick={() => {
-                    toggleShowGameDetail(metadata.uuid)
+                    toggleShowGameDetail(metadata.uuid);
                   }}
                 >
                   詳細ページ

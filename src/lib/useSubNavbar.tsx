@@ -1,12 +1,11 @@
 import { Dispatch, ReactNode, SetStateAction, useState } from "react";
 import { classNames } from "../lib/class-names";
 
-type useSubNavbarResult = [
-  string,
-  Dispatch<SetStateAction<string>>,
-  () => JSX.Element
-];
-export const useSubNavbar = (labels: readonly string[], gameDetailUUID: string): useSubNavbarResult => {
+type useSubNavbarResult = [string, Dispatch<SetStateAction<string>>, () => JSX.Element];
+export const useSubNavbar = (
+  labels: readonly string[],
+  gameDetailUUID: string,
+): useSubNavbarResult => {
   const [subNavbarLabel, setSubNavbarLabel] = useState<string>("試合結果");
   return [
     subNavbarLabel,
@@ -28,7 +27,7 @@ export const useSubNavbar = (labels: readonly string[], gameDetailUUID: string):
                 "py-2",
                 "px-4",
                 "rounded-full",
-                subNavbarLabel === label && "text-gray-800 bg-gray-100"
+                subNavbarLabel === label && "text-gray-800 bg-gray-100",
               )}
               onClick={() => setSubNavbarLabel(label)}
             >
