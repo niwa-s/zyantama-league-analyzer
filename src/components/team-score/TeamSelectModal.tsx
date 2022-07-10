@@ -4,11 +4,11 @@ import { useJoinTeam } from "@/lib/playerInfo/operations";
 import { teamInfoState } from "@/lib/teamInfo/selectors";
 
 type Props = {
-  accountId: string
-}
-export function TeamSelectModal({accountId}: Props) {
+  accountId: string;
+};
+export function TeamSelectModal({ accountId }: Props) {
   const teamInfo = useRecoilValue(teamInfoState);
-  const joinTeam = useJoinTeam()
+  const joinTeam = useJoinTeam();
   return (
     <Popover className="relative">
       <Popover.Button>Solutions</Popover.Button>

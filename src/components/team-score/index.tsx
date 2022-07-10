@@ -24,9 +24,7 @@ const TeamBoard = () => {
               <td>{teamName}</td>
               <td>
                 {joinPlayerInfo.get(teamName)?.map((playerInfo) => (
-                  <div key={playerInfo.playerId}>
-                    {playerInfo.playerName}
-                  </div>
+                  <div key={playerInfo.playerId}>{playerInfo.playerName}</div>
                 ))}
               </td>
               <td>

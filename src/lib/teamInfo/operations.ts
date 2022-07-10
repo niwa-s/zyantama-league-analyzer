@@ -8,4 +8,3 @@ export const useAddTeam = () =>
       teamNames: prev.teamNames.set(teamName, { teamName, teamColor: "gray" }),
     }));
   });
-
