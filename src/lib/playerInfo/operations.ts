@@ -41,12 +41,12 @@ export const useJoinTeam = () =>
       return;
     }
 
-    let playerInfo: PlayerInfo = { stat: new Stat(), uuids: [], team: { type: "unjoin"}}
+    let playerInfo: PlayerInfo = { stat: new Stat(), uuids: [], team: { type: "unjoin" } };
     playerInfo.stat = Stat.add(playerInfo.stat, preState[accountId].stat);
     playerInfo.uuids = [...preState[accountId].uuids];
 
     let teams = snapshot.getLoadable<TeamInfoAtom>(teamInfoAtom).contents;
-    if (teams.get(teamName)) {
+    if (teams.teamNames.get(teamName)) {
       playerInfo.team = { type: "join", name: teamName };
       set(playerInfoAtom, () => ({
         ...preState,
