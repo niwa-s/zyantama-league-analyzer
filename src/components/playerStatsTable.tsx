@@ -12,15 +12,33 @@ import {
 } from "@tanstack/react-table";
 import { useContext, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { classNames } from "../lib/class-names";
 import { Stat } from "../lib/stats";
 import { toPercentFormat } from "../lib/stats/utils";
 import { playerInfoAtom } from "@/lib/playerInfo/atoms";
+import { classNames } from "@/lib/utils";
 
-const columns: ColumnDef<Stat>[] = [
+type StatsTableType = {
+  teamName: string;
+  playerName: string;
+  teampoint: number;
+  game: number;
+  round: number;
+  rank1Rate: number;
+  rank2Rate: number;
+  rank3Rate: number;
+  rank4Rate: number;
+  riichiRate: number;
+  fuuroRate: number;
+  agariRate: number;
+  avgPointPerAgari: number;
+  houjuuRate: number;
+  avgPointPerHoujuu: number;
+};
+const columns: ColumnDef<StatsTableType>[] = [
   {
     header: "チーム名",
-    cell: () => <div className="text-center">test</div>,
+    accessorKey: "teamName",
+    cell: (info) => <div className="text-center">{info.getValue()}</div>,
   },
   {
     header: "選手名",
@@ -120,8 +138,52 @@ const columns: ColumnDef<Stat>[] = [
 
 function StatsTable() {
   const playerInfo = useRecoilValue(playerInfoAtom);
+  /*for (const [_, pInfo] of Object.entries(playerInfo)) {
+    const team = pInfo.team
+    columns[0].cell = () => <div className="text-center">{team.type === "join" ? team.name : "未設定"}</div>
+  }*/
+  console.log("playerInfo: ", playerInfo);
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [data, setData] = useState(() => Object.entries(playerInfo).map(([_, s]) => s.stat));
+  const [data, setData] = useState<StatsTableType[]>(() => {
+    let playerInfos = Object.entries(playerInfo).map(([_, s]) => s);
+    return playerInfos.map(
+      ({
+        stat: {
+          playerName,
+          teampoint,
+          game,
+          round,
+          rank1Rate,
+          rank2Rate,
+          rank3Rate,
+          rank4Rate,
+          riichiRate,
+          fuuroRate,
+          agariRate,
+          avgPointPerAgari,
+          houjuuRate,
+          avgPointPerHoujuu,
+        },
+        team,
+      }) => ({
+        teamName: team.type === "join" ? team.name : "未設定",
+        playerName,
+        teampoint,
+        game,
+        round,
+        rank1Rate,
+        rank2Rate,
+        rank3Rate,
+        rank4Rate,
+        riichiRate,
+        fuuroRate,
+        agariRate,
+        avgPointPerAgari,
+        houjuuRate,
+        avgPointPerHoujuu,
+      }),
+    );
+  });
   const table = useReactTable({
     data,
     columns,
