@@ -6,8 +6,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
+import { classNames } from "../lib/class-names";
 import { GameMetadata, GameResult, GameResultByPlayer } from "../lib/stats/types/stat";
-import { classNames } from "@/lib/utils";
 
 type Person = {
   firstName: string;

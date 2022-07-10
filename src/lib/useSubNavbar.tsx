@@ -1,5 +1,5 @@
 import { Dispatch, ReactNode, SetStateAction, useState } from "react";
-import { classNames } from "@/lib/utils";
+import { classNames } from "../lib/class-names";
 
 type useSubNavbarResult = [string, Dispatch<SetStateAction<string>>, () => JSX.Element];
 export const useSubNavbar = (
