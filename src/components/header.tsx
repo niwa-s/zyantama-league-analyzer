@@ -13,6 +13,6 @@ const Header = () => {
       </h1>
       <span className="flex-1"></span>
     </header>
-  )
-}
+  );
+};
 export default Header;

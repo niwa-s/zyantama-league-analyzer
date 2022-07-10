@@ -11,11 +11,11 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useContext, useState } from "react";
+import { useRecoilValue } from "recoil";
 import { classNames } from "../lib/class-names";
 import { Stat } from "../lib/stats";
-import { GameMetadata, GameResultByPlayer } from "../lib/stats/types/stat";
 import { toPercentFormat } from "../lib/stats/utils";
-import { PlayerInfoContext } from "@/lib/playerInfoProvider";
+import { playerInfoAtom } from "@/lib/playerInfo/atoms";
 
 const columns: ColumnDef<Stat>[] = [
   {
@@ -119,11 +119,9 @@ const columns: ColumnDef<Stat>[] = [
 ];
 
 function StatsTable() {
-  const { pinfoState } = useContext(PlayerInfoContext);
+  const playerInfo = useRecoilValue(playerInfoAtom);
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [data, setData] = useState(() =>
-    Object.entries(pinfoState).map(([_, playerInfo]) => playerInfo.stat)
-  );
+  const [data, setData] = useState(() => Object.entries(playerInfo).map(([_, s]) => s.stat));
   const table = useReactTable({
     data,
     columns,
@@ -152,26 +150,21 @@ function StatsTable() {
                       {...{
                         className: classNames(
                           "flex justify-center items-center",
-                          header.column.getCanSort()
-                            ? "cursor-pointer select-none"
-                            : ""
+                          header.column.getCanSort() ? "cursor-pointer select-none" : "",
                         ),
                         onClick: header.column.getToggleSortingHandler(),
                       }}
                     >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                      {flexRender(header.column.columnDef.header, header.getContext())}
                       {{
                         asc: <ChevronUpIcon className="w-3 h-3 text-gray-400 " />,
                         desc: <ChevronDownIcon className="w-3 h-3 text-gray-400" />,
-                      }[header.column.getIsSorted() as string] ??
-                      <div className="text-gray-400">
-                        <ChevronUpIcon className="w-3 h-3"/>
-                        <ChevronDownIcon className="w-3 h-3"/>
-                      </div>
-                      }
+                      }[header.column.getIsSorted() as string] ?? (
+                        <div className="text-gray-400">
+                          <ChevronUpIcon className="w-3 h-3" />
+                          <ChevronDownIcon className="w-3 h-3" />
+                        </div>
+                      )}
                     </div>
                   )}
                 </th>
@@ -185,12 +178,7 @@ function StatsTable() {
               {row.getVisibleCells().map((cell) => (
                 <td
                   key={cell.id}
-                  className={classNames(
-                    "border",
-                    "border-solid",
-                    "text-right",
-                    "px-2"
-                  )}
+                  className={classNames("border", "border-solid", "text-right", "px-2")}
                 >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>

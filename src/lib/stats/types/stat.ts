@@ -176,7 +176,63 @@ class Stat {
     this.gameResultStore = new Map();
   }
 
-  updateFromEvents(events: Event[], player_id: number) {
+  static add(lsh: Stat, rsh: Stat): Stat {
+    const result = new Stat();
+    result.playerId = lsh.playerId;
+    result.playerName = lsh.playerName;
+    result.playerNameUpdatedAt = lsh.playerNameUpdatedAt;
+    result.game = lsh.game + rsh.game;
+    result.round = lsh.round + rsh.round;
+    result.oya = lsh.oya + rsh.oya;
+    result.agari = lsh.agari + rsh.agari;
+    result.agariJun = lsh.agariJun + rsh.agariJun;
+    result.agariAsOya = lsh.agariAsOya + rsh.agariAsOya;
+    result.agariPointOya = lsh.agariPointOya + rsh.agariPointOya;
+    result.agariPointKo = lsh.agariPointKo + rsh.agariPointKo;
+    result.riichi = lsh.riichi + rsh.riichi;
+    result.riichiJun = lsh.riichiJun + rsh.riichiJun;
+    result.riichiAgari = lsh.riichiAgari + rsh.riichiAgari;
+    result.riichiAgariJun = lsh.riichiAgariJun + rsh.riichiAgariJun;
+    result.riichiAgariPoint = lsh.riichiAgariPoint + rsh.riichiAgariPoint;
+    result.riichiPoint = lsh.riichiPoint + rsh.riichiPoint;
+    result.riichiHoujuu = lsh.riichiHoujuu + rsh.riichiHoujuu;
+    result.riichiAsOya = lsh.riichiAsOya + rsh.riichiAsOya;
+    result.okkakeRiichi = lsh.okkakeRiichi + rsh.okkakeRiichi;
+    result.okkakerareRiichi = lsh.okkakerareRiichi + rsh.okkakerareRiichi;
+    result.fuuro = lsh.fuuro + rsh.fuuro;
+    result.fuuroNum = lsh.fuuroNum + rsh.fuuroNum;
+    result.fuuroAgari = lsh.fuuroAgari + rsh.fuuroAgari;
+    result.fuuroAgariJun = lsh.fuuroAgariJun + rsh.fuuroAgariJun;
+    result.fuuroAgariPoint = lsh.fuuroAgariPoint + rsh.fuuroAgariPoint;
+    result.fuuroPoint = lsh.fuuroPoint + rsh.fuuroPoint;
+    result.fuuroHoujuu = lsh.fuuroHoujuu + rsh.fuuroHoujuu;
+    result.damaAgari = lsh.damaAgari + rsh.damaAgari;
+    result.damaAgariJun = lsh.damaAgariJun + rsh.damaAgariJun;
+    result.damaAgariPoint = lsh.damaAgariPoint + rsh.damaAgariPoint;
+    result.yakuman = lsh.yakuman + rsh.yakuman;
+    result.nagashiMangan = lsh.nagashiMangan + rsh.nagashiMangan;
+    result.houjuu = lsh.houjuu + rsh.houjuu;
+    result.houjuuJun = lsh.houjuuJun + rsh.houjuuJun;
+    result.houjuuToOya = lsh.houjuuToOya + rsh.houjuuToOya;
+    result.houjuuPointToOya = lsh.houjuuPointToOya + rsh.houjuuPointToOya;
+    result.houjuuPointToKo = lsh.houjuuPointToKo + rsh.houjuuPointToKo;
+    result.ryukyoku = lsh.ryukyoku + rsh.ryukyoku;
+    result.ryukyokuPoint = lsh.ryukyokuPoint + rsh.ryukyokuPoint;
+    result.riichiRyukyoku = lsh.riichiRyukyoku + rsh.riichiRyukyoku;
+    result.teampoint = lsh.teampoint + rsh.teampoint;
+    result.point = lsh.point + rsh.point;
+    result.rank1 = lsh.rank1 + rsh.rank1;
+    result.rank2 = lsh.rank2 + rsh.rank2;
+    result.rank3 = lsh.rank3 + rsh.rank3;
+    result.rank4 = lsh.rank4 + rsh.rank4;
+    result.tobi = lsh.tobi + rsh.tobi;
+    result.gameResultStore = new Map([...lsh.gameResultStore, ...rsh.gameResultStore]);
+    return result;
+  }
+
+  static updateFromEvents(preStat: Stat, events: Event[], player_id: number): Stat {
+    let stat = new Stat();
+    stat = Stat.add(stat, preStat);
     let curScores = [0, 0, 0, 0];
     let finalScore = 0;
     let riichiDeclared = false;
@@ -193,19 +249,32 @@ class Stat {
     let state = "";
     let result = "";
     let uuid = "";
-    this.game++;
+    stat.game++;
     for (const event of events) {
       const type = event.type;
       if (type === "startGame") {
         uuid = event.uuid;
       } else if (type === "startKyoku") {
-        const { oya, scores, bakaze, kyotaku, kyoku, honba, playerNames, accountIds, unixTimestamp } = event;
-        this.round++;
-        if (this.playerName !== playerNames[player_id] && this.playerNameUpdatedAt < unixTimestamp) {
-          this.playerName = playerNames[player_id];
-          this.playerNameUpdatedAt = unixTimestamp;
+        const {
+          oya,
+          scores,
+          bakaze,
+          kyotaku,
+          kyoku,
+          honba,
+          playerNames,
+          accountIds,
+          unixTimestamp,
+        } = event;
+        stat.round++;
+        if (
+          stat.playerName !== playerNames[player_id] &&
+          stat.playerNameUpdatedAt < unixTimestamp
+        ) {
+          stat.playerName = playerNames[player_id];
+          stat.playerNameUpdatedAt = unixTimestamp;
         }
-        this.playerId = accountIds[player_id];
+        stat.playerId = accountIds[player_id];
 
         curScores = [...scores];
         curKyotaku = kyotaku;
@@ -217,7 +286,7 @@ class Stat {
         state = "";
         result = "";
         if (curOya === player_id) {
-          this.oya++;
+          stat.oya++;
         }
         kyokuState = {
           kyoku: kyokuInfoToString(bakaze, kyoku, honba),
@@ -240,16 +309,16 @@ class Stat {
         const { actor } = event;
         if (actor === player_id) {
           riichiDeclared = true;
-          this.riichi++;
-          this.riichiJun += jun;
+          stat.riichi++;
+          stat.riichiJun += jun;
           if (curOya === player_id) {
-            this.riichiAsOya++;
+            stat.riichiAsOya++;
           }
           if (othersRiichiDeclared) {
-            this.okkakeRiichi++;
+            stat.okkakeRiichi++;
           }
         } else if (riichiDeclared) {
-          this.okkakerareRiichi++;
+          stat.okkakerareRiichi++;
         } else {
           othersRiichiDeclared = true;
         }
@@ -269,57 +338,57 @@ class Stat {
         if (actor === player_id) {
           result = tsumo ? "ツモ" : "ロン";
           let point = deltas[player_id] - Number(riichiAccepted) * 1000;
-          this.agari++;
-          this.agariJun += jun;
+          stat.agari++;
+          stat.agariJun += jun;
 
           if (curOya === player_id) {
-            this.agariAsOya++;
-            this.agariPointOya += point;
+            stat.agariAsOya++;
+            stat.agariPointOya += point;
           } else {
-            this.agariPointKo += point;
+            stat.agariPointKo += point;
           }
 
           if (riichiAccepted) {
-            this.riichiAgari++;
-            this.riichiAgariJun += jun;
-            this.riichiAgariPoint += point;
-            this.riichiPoint += point;
+            stat.riichiAgari++;
+            stat.riichiAgariJun += jun;
+            stat.riichiAgariPoint += point;
+            stat.riichiPoint += point;
           } else if (fuuroNum > 0) {
-            this.fuuroAgari++;
-            this.fuuroAgariJun += jun;
-            this.fuuroAgariPoint += point;
-            this.fuuroPoint += point;
+            stat.fuuroAgari++;
+            stat.fuuroAgariJun += jun;
+            stat.fuuroAgariPoint += point;
+            stat.fuuroPoint += point;
           } else {
-            this.damaAgari++;
-            this.damaAgariJun += jun;
-            this.damaAgariPoint += point;
+            stat.damaAgari++;
+            stat.damaAgariJun += jun;
+            stat.damaAgariPoint += point;
           }
 
           if (
             (curOya === player_id && point >= 48000) ||
             (curOya !== player_id && point >= 32000)
           ) {
-            this.yakuman++;
+            stat.yakuman++;
           }
         } else if (target === player_id) {
           result = "放銃";
           let point = deltas[player_id];
-          this.houjuu++;
-          this.houjuuJun += jun;
+          stat.houjuu++;
+          stat.houjuuJun += jun;
 
           if (curOya === actor) {
-            this.houjuuToOya++;
-            this.houjuuPointToOya += point;
+            stat.houjuuToOya++;
+            stat.houjuuPointToOya += point;
           } else {
-            this.houjuuPointToKo += point;
+            stat.houjuuPointToKo += point;
           }
 
           if (riichiDeclared) {
-            this.riichiHoujuu++;
-            this.riichiPoint += point;
+            stat.riichiHoujuu++;
+            stat.riichiPoint += point;
           } else if (fuuroNum > 0) {
-            this.fuuroHoujuu++;
-            this.fuuroPoint += point;
+            stat.fuuroHoujuu++;
+            stat.fuuroPoint += point;
           }
         }
       } else if (type === "ryukyoku") {
@@ -332,22 +401,22 @@ class Stat {
         }
 
         let point = deltas[player_id];
-        this.ryukyoku++;
-        this.ryukyokuPoint += point;
+        stat.ryukyoku++;
+        stat.ryukyokuPoint += point;
         if (riichiAccepted) {
-          this.riichiRyukyoku++;
-          this.riichiPoint += point - 1000;
+          stat.riichiRyukyoku++;
+          stat.riichiPoint += point - 1000;
         } else if (fuuroNum > 0) {
-          this.fuuroPoint += point;
+          stat.fuuroPoint += point;
         }
 
         if (point >= 8000) {
-          this.nagashiMangan++;
+          stat.nagashiMangan++;
         }
       } else if (type === "endKyoku") {
         if (fuuroNum > 0) {
-          this.fuuro++;
-          this.fuuroNum += fuuroNum;
+          stat.fuuro++;
+          stat.fuuroNum += fuuroNum;
         }
         kyokuState.ryukyoku = isRyukyoku ? "流局" : "";
         if (fuuroNum > 0) {
@@ -366,24 +435,25 @@ class Stat {
       } else if (type === "endGame") {
         const { finalScores, ranks, teampoints } = event;
         finalScore = finalScores[player_id];
-        this.point += finalScore - 25000;
-        this.teampoint += teampoints[player_id];
+        stat.point += finalScore - 25000;
+        stat.teampoint += teampoints[player_id];
         if (finalScore < 0) {
-          this.tobi++;
+          stat.tobi++;
         }
         const rank = ranks[player_id];
         if (rank === 0) {
-          this.rank1++;
+          stat.rank1++;
         } else if (rank === 1) {
-          this.rank2++;
+          stat.rank2++;
         } else if (rank === 2) {
-          this.rank3++;
+          stat.rank3++;
         } else if (rank === 3) {
-          this.rank4++;
+          stat.rank4++;
         }
-        this.gameResultStore.set(uuid, gameResult);
+        stat.gameResultStore.set(uuid, gameResult);
       }
     }
+    return stat;
   }
 
   #totalPt(points: number[]) {

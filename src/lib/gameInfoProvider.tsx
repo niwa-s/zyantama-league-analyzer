@@ -1,11 +1,11 @@
 import React, { createContext, Dispatch } from "react";
 import { GameMetadata } from "./stats/types/stat";
 
-export const GameInfoStoreContext = createContext(
+const GameInfoStoreContext = createContext(
   {} as {
     gstoreState: GameInfoStoreState;
     gstoreDispatch: Dispatch<GameInfoStoreAction>;
-  }
+  },
 );
 type GameInfoStoreState = {
   info: { metadata: GameMetadata; showDetail: boolean }[];
@@ -22,23 +22,16 @@ type GameInfoStoreAction =
       };
     };
 
-function reducer(
-  state: GameInfoStoreState,
-  action: GameInfoStoreAction
-): GameInfoStoreState {
+function reducer(state: GameInfoStoreState, action: GameInfoStoreAction): GameInfoStoreState {
   switch (action.type) {
     case "ADD_PAIFU":
       if (
-        state.info.findIndex(
-          ({ metadata }) => metadata.timestamp === action.payload.timestamp
-        ) !== -1
+        state.info.findIndex(({ metadata }) => metadata.timestamp === action.payload.timestamp) !==
+        -1
       ) {
         return state;
       }
-      let newInfo = [
-        ...state.info,
-        { metadata: action.payload, showDetail: false },
-      ];
+      let newInfo = [...state.info, { metadata: action.payload, showDetail: false }];
       newInfo.sort((a, b) => {
         return a.metadata.timestamp > b.metadata.timestamp ? 1 : -1;
       });
@@ -56,12 +49,12 @@ function reducer(
         } else {
           return info;
         }
-      })
+      });
       toggledInfo.sort((a, b) => {
         return a.metadata.timestamp > b.metadata.timestamp ? 1 : -1;
       });
       return {
-        info: toggledInfo
+        info: toggledInfo,
       };
     default:
       return state;
@@ -72,14 +65,12 @@ type Props = {
   children: React.ReactNode;
 };
 
-export function PaifuStoreProvider({ children }: Props) {
+function PaifuStoreProvider({ children }: Props) {
   const [state, dispatch] = React.useReducer(reducer, {
     info: [],
   });
   return (
-    <GameInfoStoreContext.Provider
-      value={{ gstoreState: state, gstoreDispatch: dispatch }}
-    >
+    <GameInfoStoreContext.Provider value={{ gstoreState: state, gstoreDispatch: dispatch }}>
       {children}
     </GameInfoStoreContext.Provider>
   );

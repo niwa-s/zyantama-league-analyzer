@@ -1,16 +1,15 @@
 // 参考: https://github.com/Equim-chan/Mortal/blob/main/libriichi/src/mjai/event.rs
-import { TileStr } from './tile.js';
-import { ArrayOfLength } from '@/lib/utils.js';
-
+import { TileStr } from "./tile.js";
+import { ArrayOfLength } from "@/lib/utils.js";
 
 type StartGame = {
-  type: 'startGame';
+  type: "startGame";
   names: ArrayOfLength<4, string>;
   uuid: string;
-}
+};
 
 type StartKyoku = {
-  type: 'startKyoku';
+  type: "startKyoku";
   bakaze: TileStr;
   kyoku: number;
   honba: number;
@@ -21,98 +20,114 @@ type StartKyoku = {
   playerNames: ArrayOfLength<4, string>;
   accountIds: ArrayOfLength<4, string>;
   unixTimestamp: number;
-}
+};
 
 type Tsumo = {
-  type: 'tsumo';
+  type: "tsumo";
   actor: number;
   pai: TileStr;
-}
+};
 
 type Dahai = {
-  type: 'dahai';
+  type: "dahai";
   actor: number;
   pai: TileStr;
   tsumogiri: boolean;
-}
+};
 
 type Chi = {
-  type: 'chi';
+  type: "chi";
   actor: number;
   target: number;
   pai: TileStr;
   consumed: ArrayOfLength<2, TileStr>;
-}
+};
 
 type Pon = {
-  type: 'pon';
+  type: "pon";
   actor: number;
   target: number;
   pai: TileStr;
   consumed: ArrayOfLength<2, TileStr>;
-}
+};
 
 type Daiminkan = {
-  type: 'daiminkan';
+  type: "daiminkan";
   actor: number;
   target: number;
   pai: TileStr;
   consumed: ArrayOfLength<3, TileStr>;
-}
+};
 
 type Kakan = {
-  type: 'kakan';
+  type: "kakan";
   actor: number;
   pai: TileStr;
   consumed: ArrayOfLength<3, TileStr>;
-}
+};
 
 type Ankan = {
-  type: 'ankan';
+  type: "ankan";
   actor: number;
   consumed: ArrayOfLength<4, TileStr>;
-}
+};
 
 type Dora = {
-  type: 'dora';
+  type: "dora";
   dora_marker: TileStr;
-}
+};
 
 type Reach = {
-  type: 'reach';
+  type: "reach";
   actor: number;
   friten: boolean;
-}
+};
 
 type ReachAccepted = {
-  type: 'reachAccepted';
+  type: "reachAccepted";
   actor: number;
-}
+};
 
 type Hora = {
-  type: 'hora';
+  type: "hora";
   actor: number;
   target: number;
   tsumo: boolean;
   deltas: ArrayOfLength<4, number>;
   ura_markers: TileStr[];
-}
+};
 
 type Ryukyoku = {
-  type: 'ryukyoku';
+  type: "ryukyoku";
   deltas: ArrayOfLength<4, number>;
-}
+};
 
 type EndKyoku = {
-  type: 'endKyoku';
+  type: "endKyoku";
 };
 
 type EndGame = {
-  type: 'endGame';
+  type: "endGame";
   finalScores: ArrayOfLength<4, number>;
   ranks: ArrayOfLength<4, number>;
   teampoints: ArrayOfLength<4, number>;
 };
 
-type Event = StartGame | StartKyoku | Tsumo | Dahai | Chi | Pon | Daiminkan | Kakan | Ankan | Dora | Reach | ReachAccepted | Hora | Ryukyoku | EndKyoku | EndGame;
+type Event =
+  | StartGame
+  | StartKyoku
+  | Tsumo
+  | Dahai
+  | Chi
+  | Pon
+  | Daiminkan
+  | Kakan
+  | Ankan
+  | Dora
+  | Reach
+  | ReachAccepted
+  | Hora
+  | Ryukyoku
+  | EndKyoku
+  | EndGame;
 export default Event;

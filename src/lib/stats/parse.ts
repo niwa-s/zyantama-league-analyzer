@@ -13,30 +13,22 @@ export const readFromFilePath = (filePath: string) => {
           "shunweima_3": -10,
           "shunweima_4": -30, */
 
-function calcFinalTeamPoints(
-  ranks: number[],
-  finalScores: number[],
-  rule: any
-) {
+function calcFinalTeamPoints(ranks: number[], finalScores: number[], rule: any) {
   let initPoint = rule.init_point; // 最初の持ち点
   let oka = rule.jingsuanyuandian; // おそらくオカ
   let uma2 = rule.shunweima_2; // おそらく2位のウマ
   let uma3 = rule.shunweima_3; // おそらく3位のウマ
   let uma4 = rule.shunweima_4; // おそらく4位のウマ
-  
 
-  let zyuniPoints = [
-    -(uma2 + uma3 + uma4) + (oka - initPoint) * 4 / 1000,
-    uma2,
-    uma3,
-    uma4
-  ]
+  let zyuniPoints = [-(uma2 + uma3 + uma4) + ((oka - initPoint) * 4) / 1000, uma2, uma3, uma4];
   let teamPoints = [0, 0, 0, 0];
 
   // 順位点が変更されている場合
   if (initPoint && oka && uma2 && uma3 && uma4) {
     for (const i of [0, 1, 2, 3]) {
-      teamPoints[i] = Number(((finalScores[i] - oka) / 1000 + zyuniPoints[ranks[i]] + 0.00001).toFixed(1));
+      teamPoints[i] = Number(
+        ((finalScores[i] - oka) / 1000 + zyuniPoints[ranks[i]] + 0.00001).toFixed(1),
+      );
     }
   }
   // 順位点が変更されていない場合(つまり段位戦ルール)
@@ -54,7 +46,7 @@ function ConvertToMjaiFormat(mjsoulPaifu: any): [Event[], GameMetadata] {
   let finalScores: ArrayOfLength<4, number> = [0, 0, 0, 0];
   let ranks: ArrayOfLength<4, number> = [0, 0, 0, 0];
   let playerNames = accountsInfo.map((account: any) => account.nickname);
-  let accountIds = accountsInfo.map((account: any) => account.account_id)
+  let accountIds = accountsInfo.map((account: any) => account.account_id);
   gameResult.players.forEach((player: any, rank: number) => {
     finalScores[player.seat] = player.part_point_1;
     ranks[player.seat] = rank;
@@ -63,24 +55,18 @@ function ConvertToMjaiFormat(mjsoulPaifu: any): [Event[], GameMetadata] {
   let gameMetadata: GameMetadata = {
     uuid: mjsoulPaifu.head.uuid,
     timestamp: timestamp.toISOString(),
-    day: `${timestamp.getFullYear()}年${
-      timestamp.getMonth() + 1
-    }月${timestamp.getDate()}日`,
+    day: `${timestamp.getFullYear()}年${timestamp.getMonth() + 1}月${timestamp.getDate()}日`,
     playerNames,
     ranks: ranks,
     finalScores: finalScores,
-    teamPoints: calcFinalTeamPoints(
-      ranks,
-      finalScores,
-      mjsoulPaifu.head.config.mode.detail_rule
-    ),
-    accountIds
+    teamPoints: calcFinalTeamPoints(ranks, finalScores, mjsoulPaifu.head.config.mode.detail_rule),
+    accountIds,
   };
   events.push({
     type: "startGame",
     names: playerNames,
     uuid: mjsoulPaifu.head.uuid,
-  })
+  });
 
   for (const event of paifu.actions) {
     if (event.type !== 1) {
@@ -103,9 +89,7 @@ function ConvertToMjaiFormat(mjsoulPaifu: any): [Event[], GameMetadata] {
       isLiqi = Array(4).fill(false);
       isFriten = Array(4).fill(false);
 
-      const oyaId = [0, 1, 2, 3].find(
-        (playerId) => data[`tiles${playerId}`].length === 14
-      );
+      const oyaId = [0, 1, 2, 3].find((playerId) => data[`tiles${playerId}`].length === 14);
       const tehais = [0, 1, 2, 3].map((playerId) => {
         const tehai = data[`tiles${playerId}`] as string[];
         return tehai.map((tile) => Tile.fromMJSoul(tile));
@@ -122,7 +106,7 @@ function ConvertToMjaiFormat(mjsoulPaifu: any): [Event[], GameMetadata] {
         tehais: tehais,
         playerNames: playerNames,
         accountIds,
-        unixTimestamp: Number(mjsoulPaifu.head.start_time)
+        unixTimestamp: Number(mjsoulPaifu.head.start_time),
       });
     } else if (name === ".lq.RecordDealTile") {
       if (data.liqi) {
@@ -178,10 +162,7 @@ function ConvertToMjaiFormat(mjsoulPaifu: any): [Event[], GameMetadata] {
           actor: data.seat,
           target: data.froms[2],
           pai: Tile.fromMJSoul(data.tiles[2]),
-          consumed: [
-            Tile.fromMJSoul(data.tiles[0]),
-            Tile.fromMJSoul(data.tiles[1]),
-          ],
+          consumed: [Tile.fromMJSoul(data.tiles[0]), Tile.fromMJSoul(data.tiles[1])],
         });
 
         // ポン
@@ -191,10 +172,7 @@ function ConvertToMjaiFormat(mjsoulPaifu: any): [Event[], GameMetadata] {
           actor: data.seat,
           target: data.froms[2],
           pai: Tile.fromMJSoul(data.tiles[2]),
-          consumed: [
-            Tile.fromMJSoul(data.tiles[0]),
-            Tile.fromMJSoul(data.tiles[1]),
-          ],
+          consumed: [Tile.fromMJSoul(data.tiles[0]), Tile.fromMJSoul(data.tiles[1])],
         });
 
         // カン
@@ -256,9 +234,7 @@ function ConvertToMjaiFormat(mjsoulPaifu: any): [Event[], GameMetadata] {
       const uradora = [];
       for (const hule of hules) {
         if (hule.li_doras) {
-          uradora.push(
-            hule.li_doras.map((tile: string) => Tile.fromMJSoul(tile))
-          );
+          uradora.push(hule.li_doras.map((tile: string) => Tile.fromMJSoul(tile)));
           break;
         }
       }
@@ -278,7 +254,7 @@ function ConvertToMjaiFormat(mjsoulPaifu: any): [Event[], GameMetadata] {
         assert(
           targetPlayer !== -1,
           `[.lq.RecordHule] targetPlayer not found
-${JSON.stringify(data)}`
+${JSON.stringify(data)}`,
         );
         for (const hule of hules) {
           events.push({

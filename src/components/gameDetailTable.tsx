@@ -7,11 +7,7 @@ import {
 } from "@tanstack/react-table";
 import { useState } from "react";
 import { classNames } from "../lib/class-names";
-import {
-  GameMetadata,
-  GameResult,
-  GameResultByPlayer,
-} from "../lib/stats/types/stat";
+import { GameMetadata, GameResult, GameResultByPlayer } from "../lib/stats/types/stat";
 
 type Person = {
   firstName: string;
@@ -64,9 +60,7 @@ function createData(playerResults: GameResultByPlayer[][]) {
 
   return gameResult;
 }
-function createPlayerFooter(playerId: number) {
-
-}
+function createPlayerFooter(playerId: number) {}
 
 const defaultData: Person[] = [
   {
@@ -100,12 +94,8 @@ const gameTitle = "第4節 第2試合";
 const teamNames: string[] = ["player1", "player2", "player3", "player4"];
 const playerNames: string[] = ["a", "a", "a", "a"];
 
-const numberCell = (info: any) => (
-  <div className="text-right px-2">{info.getValue()}</div>
-);
-const textCell = (info: any) => (
-  <div className="text-center px-2">{info.getValue()}</div>
-);
+const numberCell = (info: any) => <div className="text-right px-2">{info.getValue()}</div>;
+const textCell = (info: any) => <div className="text-center px-2">{info.getValue()}</div>;
 
 function createPlayerColumn(playerId: 1 | 2 | 3 | 4): ColumnDef<GameResult> {
   return {
@@ -136,7 +126,7 @@ function createPlayerColumn(playerId: 1 | 2 | 3 | 4): ColumnDef<GameResult> {
                 ? "text-red-500"
                 : info.getValue() !== "0"
                 ? "text-blue-500"
-                : "hidden"
+                : "hidden",
             )}
           >
             {info.getValue()}
@@ -244,9 +234,7 @@ const _columns: ColumnDef<Person>[] = [
         accessorKey: "age",
         header: () => "Age",
         footer: (props) => props.column.id,
-        cell: (info) => (
-          <div className="text-right px-1">{info.getValue()}</div>
-        ),
+        cell: (info) => <div className="text-right px-1">{info.getValue()}</div>,
       },
       {
         header: "More Info",
@@ -255,9 +243,7 @@ const _columns: ColumnDef<Person>[] = [
             accessorKey: "visits",
             header: () => <span>Visits</span>,
             footer: (props) => props.column.id,
-            cell: (info) => (
-              <div className="text-right px-1">{info.getValue()}</div>
-            ),
+            cell: (info) => <div className="text-right px-1">{info.getValue()}</div>,
           },
           {
             accessorKey: "status",
@@ -268,9 +254,7 @@ const _columns: ColumnDef<Person>[] = [
             accessorKey: "progress",
             header: "Profile Progress",
             footer: (props) => props.column.id,
-            cell: (info) => (
-              <div className="text-right px-1">{info.getValue()}</div>
-            ),
+            cell: (info) => <div className="text-right px-1">{info.getValue()}</div>,
           },
         ],
       },
@@ -314,13 +298,15 @@ function getPlayerTableHeaderCss(playerId: number) {
 
 function Table({ playerResults, metadata }: Props) {
   columns[0].header = metadata.day;
-  columns[0].footer = "試合結果"
+  columns[0].footer = "試合結果";
   for (const i of [0, 1, 2, 3]) {
     columns[i + 1].columns![0].header = metadata.playerNames[i];
     columns[i + 1].header = teamNames[i];
 
-  console.log("finalscores:", metadata.finalScores)
-    columns[i + 1].footer = () => <div>{`${metadata.ranks[i] + 1}着   ${metadata.teamPoints[i]}pts`}</div>
+    console.log("finalscores:", metadata.finalScores);
+    columns[i + 1].footer = () => (
+      <div>{`${metadata.ranks[i] + 1}着   ${metadata.teamPoints[i]}pts`}</div>
+    );
   }
 
   const [data] = useState(() => [...createData(playerResults)]);
@@ -347,15 +333,12 @@ function Table({ playerResults, metadata }: Props) {
                     colSpan={header.colSpan}
                     className={classNames(
                       "border-2 border-solid px-1 py-1 border-black bg-gray-200",
-                      header.depth <= 2 && getPlayerTableHeaderCss(i)
+                      header.depth <= 2 && getPlayerTableHeaderCss(i),
                     )}
                   >
                     {header.isPlaceholder
                       ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                      : flexRender(header.column.columnDef.header, header.getContext())}
                   </th>
                 ))}
               </tr>
@@ -378,8 +361,7 @@ function Table({ playerResults, metadata }: Props) {
                       (cell.column.columnDef.header === "得点" ||
                         cell.column.columnDef.header === "流局") &&
                         "border-r-black border-r-2",
-                      cell.column.columnDef.header === "結果" &&
-                        getResultColCss(cell.getValue())
+                      cell.column.columnDef.header === "結果" && getResultColCss(cell.getValue()),
                     )}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -402,16 +384,11 @@ function Table({ playerResults, metadata }: Props) {
                     <th
                       key={header.id}
                       colSpan={header.colSpan}
-                      className={classNames(
-                        "border-2 border-solid p-1 border-black text-3xl"
-                      )}
+                      className={classNames("border-2 border-solid p-1 border-black text-3xl")}
                     >
                       {header.isPlaceholder
                         ? null
-                        : flexRender(
-                            header.column.columnDef.footer,
-                            header.getContext()
-                          )}
+                        : flexRender(header.column.columnDef.footer, header.getContext())}
                     </th>
                   ))}
               </tr>
