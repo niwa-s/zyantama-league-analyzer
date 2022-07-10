@@ -120,9 +120,11 @@ const columns: ColumnDef<Stat>[] = [
 
 function StatsTable() {
   const playerInfo = useRecoilValue(playerInfoAtom);
+  console.log("playerInfo: ", playerInfo);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [data, setData] = useState(() => Object.entries(playerInfo).map(([_, s]) => s.stat));
   const table = useReactTable({
+
     data,
     columns,
     state: {

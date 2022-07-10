@@ -1,10 +1,9 @@
 import { selector, selectorFamily } from "recoil";
 import { GameResultByPlayer } from "../stats/types/stat";
 import { playerInfoAtom } from "./atoms";
-import { PlayerInfoAtom } from "./types";
 
 export const playerInfoState = selector({
-  key: "playerInfoAtom",
+  key: "playerInfo",
   get: ({ get }) => get(playerInfoAtom),
 });
 

@@ -179,8 +179,14 @@ class Stat {
   static add(lsh: Stat, rsh: Stat): Stat {
     const result = new Stat();
     result.playerId = lsh.playerId;
-    result.playerName = lsh.playerName;
-    result.playerNameUpdatedAt = lsh.playerNameUpdatedAt;
+    if (lsh.playerNameUpdatedAt > rsh.playerNameUpdatedAt) {
+      result.playerName = lsh.playerName;
+      result.playerNameUpdatedAt = lsh.playerNameUpdatedAt;
+    }
+    else {
+      result.playerName = rsh.playerName;
+      result.playerNameUpdatedAt = rsh.playerNameUpdatedAt;
+    }
     result.game = lsh.game + rsh.game;
     result.round = lsh.round + rsh.round;
     result.oya = lsh.oya + rsh.oya;
