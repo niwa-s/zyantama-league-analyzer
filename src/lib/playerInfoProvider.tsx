@@ -2,7 +2,7 @@ import { createContext, Dispatch, useReducer, useState } from "react";
 import { GameMetadata } from "../lib/stats/types/stat";
 import { ConvertToMjaiFormat, Stat, Event } from "./stats";
 
-export const PlayerInfoContext = createContext(
+const PlayerInfoContext = createContext(
   {} as {
     pinfoState: PlayerInfoType;
     pinfoDispatch: Dispatch<PlayerInfoActionType>;
@@ -61,7 +61,7 @@ function reducer(state: PlayerInfoType, action: PlayerInfoActionType): PlayerInf
 type Props = {
   children: React.ReactNode;
 };
-export const PlayerInfoProvider = ({ children }: Props) => {
+const PlayerInfoProvider = ({ children }: Props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   return (
     <PlayerInfoContext.Provider value={{ pinfoState: state, pinfoDispatch: dispatch }}>

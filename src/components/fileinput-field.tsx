@@ -9,9 +9,7 @@ const FileInputField = ({ onChange }: Props) => {
     <div className="flex justify-center m-4">
       <form className="flex items-center space-x-6">
         <label className="block">
-          <span className="text-sm">
-            ここに牌譜データをアップロードしてください。
-          </span>
+          <span className="text-sm">ここに牌譜データをアップロードしてください。</span>
           <input
             type="file"
             /* @ts-expect-error */

@@ -16,12 +16,12 @@ export const useUpdatePlayerStats = () =>
         if (preState[accountId]) {
           playerInfo.stat = Stat.add(playerInfo.stat, preState[accountId].stat);
         }
-        
+
         if (!playerInfo.uuids.includes(metadata.uuid)) {
           playerInfo.stat = Stat.updateFromEvents(playerInfo.stat, events, playerId);
           console.log("update playerInfo", playerInfo, preState[accountId]);
           playerInfo.uuids.push(metadata.uuid);
-          console.log(`${playerInfo.stat.playerName}:`,playerInfo)
+          console.log(`${playerInfo.stat.playerName}:`, playerInfo);
           set(playerInfoAtom, () => ({
             ...preState,
             [accountId]: playerInfo,

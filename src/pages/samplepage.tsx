@@ -10,7 +10,7 @@ const SamplePage = () => {
   const [subNavbarLabel, setSubNavbarLabel, SubNavbar] = useSubNavbar(
     ["試合結果", "個人成績", "試合詳細"],
     gameDetailUUID,
-  ); 
+  );
 
   return (
     <div className="container mx-auto px-4 flex-1">

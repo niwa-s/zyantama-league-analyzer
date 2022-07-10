@@ -1,7 +1,7 @@
-import { atom } from "recoil"
-import { GameInfoAtom } from "./types"
+import { atom } from "recoil";
+import { GameInfoAtom } from "./types";
 
 export const gameInfoAtom = atom<GameInfoAtom>({
-    key: "gameInfo",
-    default: []
-})
+  key: "gameInfo",
+  default: [],
+});
