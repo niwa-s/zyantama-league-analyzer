@@ -11,7 +11,9 @@ export function TeamSelectModal({ accountId }: Props) {
   const joinTeam = useJoinTeam();
   return (
     <Popover className="relative">
-      <Popover.Button className={"bg-blue-500 text-white rounded-full py-1 px-2 hover:bg-blue-300"}>チームに追加する</Popover.Button>
+      <Popover.Button className={"bg-blue-500 text-white rounded-full py-1 px-2 hover:bg-blue-300"}>
+        チームに追加する
+      </Popover.Button>
 
       <Popover.Panel className="absolute left-1/2 z-10 mt-3 w-screen max-w-xs -translate-x-1/2 transform px-4">
         <div className="overflow-hidden rounded-lg shadow-lg ring-1  ring-black ring-opacity-5">

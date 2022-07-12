@@ -9,30 +9,28 @@ type Props = {
 // tailwindはテンプレートリテラルで生成したスタイルを認識できない? (bg-${color}-700など)
 const styleByTeamColor = {
   indigo: {
-    hoverBg: "hover:bg-indigo-700"
+    hoverBg: "hover:bg-indigo-700",
   },
   yellow: {
-    hoverBg: "hover:bg-yellow-700"
+    hoverBg: "hover:bg-yellow-700",
   },
   red: {
-    hoverBg: "hover:bg-red-700"
+    hoverBg: "hover:bg-red-700",
   },
   purple: {
-    hoverBg: "hover:bg-purple-700"
+    hoverBg: "hover:bg-purple-700",
   },
   pink: {
-    hoverBg: "hover:bg-pink-700"
+    hoverBg: "hover:bg-pink-700",
   },
   green: {
-    hoverBg: "hover:bg-green-700"
+    hoverBg: "hover:bg-green-700",
   },
-}
-
+};
 
 const teamColors: TeamColor[] = ["indigo", "yellow", "red", "purple", "pink", "green"];
 
 export const ColorSelector = ({ selectedColor, onClick }: Props) => {
-
   return (
     <div className="flex px-2 h-8 rounded-3xl items-center gap-2">
       {teamColors.map((color) => (

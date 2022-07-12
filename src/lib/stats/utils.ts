@@ -29,7 +29,7 @@ function toPercentFormat(num: number, fixed?: number) {
 export { toPercentFormat, changToBakaze, kyokuInfoToString, danniIdToString };
 
 function danniIdToString(id: number) {
-  console.log("danni: ", id)
+  console.log("danni: ", id);
   switch (id) {
     case 10101:
       return "初心1";
@@ -65,7 +65,7 @@ function danniIdToString(id: number) {
       return "魂天";
     default:
       const kontenLevel = id % 100;
-      console.log("段位不明: ", id, `魂天${kontenLevel.toString()}として扱う`)
+      console.log("段位不明: ", id, `魂天${kontenLevel.toString()}として扱う`);
       return `魂天${kontenLevel.toString()}`;
   }
 }

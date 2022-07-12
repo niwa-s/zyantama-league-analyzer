@@ -25,9 +25,7 @@ const TeamBoard = () => {
               <td>
                 {joinPlayerInfo.get(teamName)?.map((playerInfo) => (
                   <div className="flex" key={playerInfo.playerId}>
-                    <div className="p-1">
-                      {playerInfo.playerName}
-                    </div>
+                    <div className="p-1">{playerInfo.playerName}</div>
                     <button className="bg-red-500 my-1 px-1 rounded flex items-center text-white font-bold">
                       <TrashIcon className="w-5 h-5" />
                     </button>
