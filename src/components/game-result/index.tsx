@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRecoilValue } from "recoil";
 import FileInputField from "../fileinput-field";
 import { GameDetail } from "../game-detail";
-import { useAddPaifu, useToggleShowGameDetail } from "@/lib/gameInfo/operations";
+import { useAddPaifu, useRemovePaifu, useToggleShowGameDetail } from "@/lib/gameInfo/operations";
 import { gameInfoState } from "@/lib/gameInfo/selectors";
 import { playerInfoAtom } from "@/lib/playerInfo/atoms";
 import { useUpdatePlayerStats } from "@/lib/playerInfo/operations";
@@ -13,6 +13,7 @@ import { useSampleData } from "@/lib/useSampleData";
 export function GameResult() {
   const [SampleButton] = useSampleData();
   //const { pinfoDispatch, pinfoState } = useContext(PlayerInfoContext);
+  const removePaifu = useRemovePaifu();
   const playerInfo = useRecoilValue(playerInfoAtom);
   const updatePlayerStats = useUpdatePlayerStats();
   const addPaifu = useAddPaifu();
@@ -28,7 +29,7 @@ export function GameResult() {
       addPaifu(metadata);
       for (const playerId of [0, 1, 2, 3]) {
         console.log("add player:", metadata.playerNames[playerId]);
-        updatePlayerStats(playerId, events, metadata);
+        updatePlayerStats(playerId, metadata);
       }
     }
   };
@@ -76,7 +77,10 @@ export function GameResult() {
                 )}
               </td>
               <td>
-                <button className="bg-red-500 py-2 pl-3 pr-4 rounded flex items-center text-white font-bold">
+                <button
+                  className="bg-red-500 hover:bg-red-300 py-2 pl-3 pr-4 rounded flex items-center text-white font-bold"
+                  onClick={() => removePaifu(metadata.uuid)}
+                >
                   <TrashIcon className="w-6 h-6 mr-2" />
                   <span>削除</span>
                 </button>

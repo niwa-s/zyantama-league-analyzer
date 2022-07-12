@@ -1,11 +1,50 @@
 import { selector, selectorFamily } from "recoil";
-import Stat, { GameResultByPlayer } from "../stats/types/stat";
+import { gameInfoByAccountIdState, gameInfoByUuidState } from "../gameInfo/selectors";
+import { Stat, GameResultByPlayer } from "../stats";
 import { playerInfoAtom } from "./atoms";
 import { PlayerInfo } from "./types";
 
 export const playerInfoState = selector({
   key: "playerInfo",
-  get: ({ get }) => get(playerInfoAtom),
+  get: ({ get }) => {
+    const playerInfoSlim = get(playerInfoAtom);
+    const playerInfos: {
+      [accountId: string]: PlayerInfo;
+    } = {};
+    const playerStats = get(playerStatsByAccountIdState);
+    for (const [accountId, { team }] of Object.entries(playerInfoSlim)) {
+      const uuids = get(gameInfoByAccountIdState(accountId)).map((metadata) => metadata.uuid);
+      if (uuids.length === 0) continue;
+      playerInfos[accountId] = {
+        team,
+        stat: playerStats[accountId],
+        uuids,
+      };
+    }
+    return playerInfos;
+  },
+});
+
+export const playerStatsByAccountIdState = selector({
+  key: "playerStatsByAccountId",
+  get: ({ get }) => {
+    const playerInfos = get(playerInfoAtom);
+    const playerStats: { [accountId: string]: Stat } = {};
+    for (let accountId of Object.keys(playerInfos)) {
+      const metadatas = get(gameInfoByAccountIdState(accountId));
+      let stat = new Stat();
+      for (const { uuid } of metadatas) {
+        const { metadata } = get(gameInfoByUuidState(uuid));
+        console.log("accountId: ", accountId, "uuid: ", uuid, "metadata: ", metadata);
+        const playerId = metadata.accountIds.indexOf(accountId);
+        console.assert(playerId >= 0, "accountId not found");
+
+        stat = Stat.updateFromEvents(stat, metadata.events, playerId);
+      }
+      playerStats[accountId] = stat;
+    }
+    return playerStats;
+  },
 });
 
 export const TeamUnJoinPlayerInfoState = selector({
@@ -47,7 +86,7 @@ export const GameDetailByUuidState = selectorFamily<GameResultByPlayer[][], Game
     get:
       ({ UUID, accountIds }) =>
       ({ get }) => {
-        const playerInfo = get(playerInfoAtom);
+        const playerInfo = get(playerInfoState);
         const players = accountIds.map((accountId) => playerInfo[accountId]);
         const gameDetail = players.map((player) => player.stat.gameResultStore.get(UUID)!);
         return gameDetail;

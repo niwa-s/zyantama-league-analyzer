@@ -93,7 +93,7 @@ export const useSampleData = () => {
       const [events, metadata] = ConvertToMjaiFormat(paifu);
       addPaifu(metadata);
       for (const playerId of [0, 1, 2, 3]) {
-        updatePlayerStats(playerId, events, metadata);
+        updatePlayerStats(playerId, metadata);
         console.log(playerInfos);
       }
     }
