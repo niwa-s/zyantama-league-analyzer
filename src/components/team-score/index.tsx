@@ -21,18 +21,18 @@ const TeamBoard = () => {
         {[...teamInfo.teamNames.values()].map(({ teamName, teamColor }) => (
           <tbody key={teamName} className="border-b">
             <tr>
-              <td>{teamName}</td>
+              <td className={`bg-${teamColor}-200 text-black px-2 text-center`}>{teamName}</td>
               <td>
                 {joinPlayerInfo.get(teamName)?.map((playerInfo) => (
-                  <div key={playerInfo.playerId}>{playerInfo.playerName}</div>
+                  <div className="flex" key={playerInfo.playerId}>
+                    <div className="p-1">{playerInfo.playerName}</div>
+                    <button className="bg-red-500 my-1 px-1 rounded flex items-center text-white font-bold">
+                      <TrashIcon className="w-5 h-5" />
+                    </button>
+                  </div>
                 ))}
               </td>
-              <td>
-                <button className="bg-red-500 py-1 pl-2 pr-3 rounded flex items-center text-white font-bold">
-                  <TrashIcon className="w-6 h-6 mr-2" />
-                  <span>削除</span>
-                </button>
-              </td>
+              <td></td>
             </tr>
           </tbody>
         ))}

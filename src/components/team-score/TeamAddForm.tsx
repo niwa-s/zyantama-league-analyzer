@@ -1,21 +1,30 @@
 import { useState } from "react";
 import { TeamLabel } from "../TeamLabel";
+import { ColorSelector } from "./colorSelector";
 import { useJoinTeam } from "@/lib/playerInfo/operations";
 import { useAddTeam } from "@/lib/teamInfo/operations";
+
+export type TeamColor = "indigo" | "yellow" | "red" | "purple" | "pink" | "green";
 
 export const TeamAddForm = () => {
   const addTeam = useAddTeam();
   const [teamName, setTeamName] = useState("");
+  const [selectedTeamColor, setSelectedTeamColor] = useState<TeamColor>("indigo");
+  const onColorSelecterClick = (color: TeamColor) => (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setSelectedTeamColor(color);
+  };
   return (
-    <form className="flex border-b border-teal-500">
-      <TeamLabel teamColor="black" teamName={teamName} />
+    <div className="flex border-b">
+      {/*<TeamLabel teamColor="black" teamName={teamName} />*/}
       <input
-        className=" appearance-none leading-tight bg-transparent border-none focus:outline-none"
+        className="focus:outline-none"
         type="text"
         placeholder="チーム名"
         value={teamName}
         onChange={(e) => setTeamName(e.target.value)}
       />
+      <ColorSelector selectedColor={selectedTeamColor} onClick={onColorSelecterClick} />
       <button
         className="border bg-teal-500 hover:bg-teal-700 text-white py-1 px-2 rounded"
         onClick={(event) => {
@@ -23,13 +32,13 @@ export const TeamAddForm = () => {
           if (teamName === "") {
             return;
           }
-          addTeam(teamName.trim());
+          addTeam(teamName.trim(), selectedTeamColor);
           setTeamName("");
         }}
       >
         追加する
       </button>
-    </form>
+    </div>
   );
 };
 
