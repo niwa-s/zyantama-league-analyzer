@@ -78,7 +78,7 @@ export const useSampleData = () => {
   const paifus: string[] = [];
   // 本当は読み込み完了を待つ必要があるけど、ボタンが押される前には完了していそう？
   fileNames.forEach((fileName) => {
-    import(`../../siniki-paifu/${fileName}`).then((res) => {
+    import(`../siniki-paifu/${fileName}`).then((res) => {
       paifus.push(res.default as string);
     });
   });
