@@ -3,6 +3,7 @@ import StatsTable from "../components/playerStatsTable";
 import { GameDetail } from "@/components/game-detail";
 import { GameResult } from "@/components/game-result";
 import TeamBoard from "@/components/team-score";
+import { useSampleData } from "@/lib/useSampleData";
 import { useSubNavbar } from "@/lib/useSubNavbar";
 
 const SamplePage = () => {

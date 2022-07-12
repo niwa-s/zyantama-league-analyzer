@@ -1,4 +1,5 @@
 import { ArrowsExpandIcon, TrashIcon, XIcon } from "@heroicons/react/solid";
+import Link from "next/link";
 import { useRecoilValue } from "recoil";
 import FileInputField from "../fileinput-field";
 import { GameDetail } from "../game-detail";
@@ -7,8 +8,10 @@ import { gameInfoState } from "@/lib/gameInfo/selectors";
 import { playerInfoAtom } from "@/lib/playerInfo/atoms";
 import { useUpdatePlayerStats } from "@/lib/playerInfo/operations";
 import { ConvertToMjaiFormat } from "@/lib/stats";
+import { useSampleData } from "@/lib/useSampleData";
 
 export function GameResult() {
+  const [SampleButton] = useSampleData();
   //const { pinfoDispatch, pinfoState } = useContext(PlayerInfoContext);
   const playerInfo = useRecoilValue(playerInfoAtom);
   const updatePlayerStats = useUpdatePlayerStats();
@@ -26,19 +29,9 @@ export function GameResult() {
       for (const playerId of [0, 1, 2, 3]) {
         console.log("add player:", metadata.playerNames[playerId]);
         updatePlayerStats(playerId, events, metadata);
-        /*
-        pinfoDispatch({
-          type: "UPDATE_PLAYER_STATS",
-          payload: {
-            playerId,
-            events,
-            metadata,
-          },
-        });*/
       }
     }
   };
-  //console.log(pinfoState);
   return (
     <div className="w-full">
       <table className="w-full">
@@ -99,7 +92,24 @@ export function GameResult() {
           </tbody>
         ))}
       </table>
-      <FileInputField onChange={useHandleFileChange}></FileInputField>
+      <div className="flex items-center">
+        <div className="flex-1">
+          <FileInputField onChange={useHandleFileChange}></FileInputField>
+        </div>
+        <div className="flex flex-col text-smjustify-center flex-1">
+          <div>
+            <a
+              className="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
+              rel="noopener noreferrer"
+              href="https://twitter.com/shiniki_league_?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"
+            >
+              神域リーグ
+            </a>
+            の成績を表示します。
+          </div>
+          <SampleButton />
+        </div>
+      </div>
     </div>
   );
 }
