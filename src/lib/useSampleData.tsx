@@ -82,8 +82,6 @@ export const useSampleData = () => {
       paifus.push(res.default as string);
     });
   });
-  if (paifus.length !== fileNames.length) {
-  }
   const playerInfos = useRecoilValue(playerInfoState);
   const addPaifu = useAddPaifu();
   const updatePlayerStats = useUpdatePlayerStats();
