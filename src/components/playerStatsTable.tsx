@@ -142,7 +142,16 @@ function StatsTable() {
     const team = pInfo.team
     columns[0].cell = () => <div className="text-center">{team.type === "join" ? team.name : "未設定"}</div>
   }*/
-  console.log("playerInfo: ", playerInfo);
+  console.log("[");
+  for (const { stat } of Object.values(playerInfo)) {
+    console.log(`{
+      accountId: ${stat.playerId},
+      teamName: "",
+      playerName: "${stat.playerName}",
+},
+    `);
+  }
+  console.log("]");
   const [sorting, setSorting] = useState<SortingState>([]);
   const [data, setData] = useState<StatsTableType[]>(() => {
     let playerInfos = Object.entries(playerInfo).map(([_, s]) => s);

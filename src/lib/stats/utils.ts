@@ -29,7 +29,6 @@ function toPercentFormat(num: number, fixed?: number) {
 export { toPercentFormat, changToBakaze, kyokuInfoToString, danniIdToString };
 
 function danniIdToString(id: number) {
-  console.log("danni: ", id);
   switch (id) {
     case 10101:
       return "初心1";
