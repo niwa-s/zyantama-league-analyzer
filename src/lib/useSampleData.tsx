@@ -1,5 +1,4 @@
 import { useRecoilValue } from "recoil";
-import useSWR from "swr";
 import { useAddPaifu } from "./gameInfo/operations";
 import { useJoinTeam, useUpdatePlayerStats } from "./playerInfo/operations";
 import { playerInfoState } from "./playerInfo/selectors";
@@ -48,15 +47,50 @@ const players: { accountId: number; teamName: string; playerName: string }[] = [
   { accountId: 75295925, teamName: "アキレス", playerName: "あまみゃ" },
 ];
 
+/*
+
+メモ: これでサンプルファイルを読み込める
+const dir = path.join(process.cwd(), 'siniki-paifu');
+fs.readdir(dir, (e,file) => {
+  console.log(file)
+}
+
+*/
+const fileNames: string[] = [
+  "mahjongsoul_paifu_220508-33d67351-5ec4-4799-9a26-a78c1da05b4f.json",
+  "mahjongsoul_paifu_220508-63f4659a-3256-45ef-9573-df6812d6e4ad.json",
+  "mahjongsoul_paifu_220508-64b55c21-c560-47e2-b417-ffb4d800e7ff.json",
+  "mahjongsoul_paifu_220523-c96156c3-504d-4e9c-b162-6ff0e703cabb.json",
+  "mahjongsoul_paifu_220523-df66bbd9-f8db-4ea5-94df-2f27f2d33a6d.json",
+  "mahjongsoul_paifu_220523-f8180ee9-698c-4942-9cd1-1c9c1f4eba1d.json",
+  "mahjongsoul_paifu_220606-92e8b75e-ec12-4471-b9f8-538f47065f98.json",
+  "mahjongsoul_paifu_220606-bc946b78-2e32-42be-9113-36a7b71d523b.json",
+  "mahjongsoul_paifu_220606-e76631ee-d137-40f9-8a58-0c7b202d1aa8.json",
+  "mahjongsoul_paifu_220620-273cc7e4-2a8b-4f20-96e7-b5a926514f65.json",
+  "mahjongsoul_paifu_220620-43eea012-01f1-4cff-b724-c8f22c10eaba.json",
+  "mahjongsoul_paifu_220620-7a09105a-cfd9-445a-b11b-22f27596f129.json",
+  "mahjongsoul_paifu_220704-1a8972e8-6c0f-4c8d-9e4f-f1225cee421f.json",
+  "mahjongsoul_paifu_220704-3035b7e8-89af-40d5-8ee7-645a002e953d.json",
+  "mahjongsoul_paifu_220704-ea2cdae9-08a6-4c31-bf6d-c6dd45f21623.json",
+];
+
 export const useSampleData = () => {
+  const paifus: string[] = [];
+  // 本当は読み込み完了を待つ必要があるけど、ボタンが押される前には完了していそう？
+  fileNames.forEach((fileName) => {
+    import(`../../siniki-paifu/${fileName}`).then((res) => {
+      paifus.push(res.default as string);
+    });
+  });
+  if (paifus.length !== fileNames.length) {
+  }
   const playerInfos = useRecoilValue(playerInfoState);
-  const { data } = useSWR("/api/hello", fetcher);
   const addPaifu = useAddPaifu();
   const updatePlayerStats = useUpdatePlayerStats();
   const teamAdd = useAddTeam();
   const joinTeam = useJoinTeam();
   const onClick = () => {
-    const paifus = (data.data as string[]).map((data) => JSON.parse(data));
+    //const paifus = (data.data as string[]).map((data) => JSON.parse(data));
     for (const paifu of paifus) {
       const [events, metadata] = ConvertToMjaiFormat(paifu);
       addPaifu(metadata);
