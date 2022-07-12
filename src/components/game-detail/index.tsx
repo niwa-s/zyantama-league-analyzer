@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { useRecoilValue } from "recoil";
 import ScoreLineChart from "../ScoreLineChart";
 import GameDetailTable from "../gameDetailTable";
-import { gameInfoByUuid } from "@/lib/gameInfo/selectors";
+import { gameInfoByUuidState } from "@/lib/gameInfo/selectors";
 import { playerInfoAtom } from "@/lib/playerInfo/atoms";
 import { GameDetailByUuidState } from "@/lib/playerInfo/selectors";
 
@@ -10,7 +10,7 @@ type Props = {
   UUID: string;
 };
 export function GameDetail({ UUID }: Props) {
-  const gameInfo = useRecoilValue(gameInfoByUuid(UUID));
+  const gameInfo = useRecoilValue(gameInfoByUuidState(UUID));
   console.log("gameInfo:", gameInfo);
   const playerResults = useRecoilValue(
     GameDetailByUuidState({ UUID, accountIds: gameInfo.metadata.accountIds }),

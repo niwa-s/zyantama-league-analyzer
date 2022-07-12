@@ -13,6 +13,10 @@ export const useAddPaifu = () =>
     );
   });
 
+export const useRemovePaifu = () =>
+  useRecoilCallback(({ set }) => (uuid: string) => {
+    set(gameInfoAtom, (prev) => prev.filter((gameInfo) => gameInfo.metadata.uuid !== uuid));
+  });
 export const useToggleShowGameDetail = () =>
   useRecoilCallback(({ set }) => (uuid: string) => {
     set(gameInfoAtom, (prev) =>

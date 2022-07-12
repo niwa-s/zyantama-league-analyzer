@@ -47,24 +47,19 @@ function ConvertToMjaiFormat(mjsoulPaifu: any): [Event[], GameMetadata] {
   let finalScores: ArrayOfLength<4, number> = [0, 0, 0, 0];
   let ranks: ArrayOfLength<4, number> = [0, 0, 0, 0];
   let playerNames = accountsInfo.map((account: any) => account.nickname);
-  let accountIds = accountsInfo.map((account: any) => account.account_id);
+  let accountIds = accountsInfo.map((account: any) => account.account_id.toString());
   let dannis = accountsInfo.map((account: any) => danniIdToString(account.level.id));
   gameResult.players.forEach((player: any, rank: number) => {
     finalScores[player.seat] = player.part_point_1;
     ranks[player.seat] = rank;
   });
+  let teamPoints = calcFinalTeamPoints(
+    ranks,
+    finalScores,
+    mjsoulPaifu.head.config.mode.detail_rule,
+  );
   let timestamp = new Date(Number(mjsoulPaifu.head.start_time) * 1000);
-  let gameMetadata: GameMetadata = {
-    dannis,
-    uuid: mjsoulPaifu.head.uuid,
-    timestamp: timestamp.toISOString(),
-    day: `${timestamp.getFullYear()}年${timestamp.getMonth() + 1}月${timestamp.getDate()}日`,
-    playerNames,
-    ranks: ranks,
-    finalScores: finalScores,
-    teamPoints: calcFinalTeamPoints(ranks, finalScores, mjsoulPaifu.head.config.mode.detail_rule),
-    accountIds,
-  };
+
   events.push({
     type: "startGame",
     names: playerNames,
@@ -78,7 +73,7 @@ function ConvertToMjaiFormat(mjsoulPaifu: any): [Event[], GameMetadata] {
           type: "endGame",
           finalScores: finalScores,
           ranks: ranks,
-          teampoints: gameMetadata.teamPoints as ArrayOfLength<4, number>,
+          teampoints: teamPoints as ArrayOfLength<4, number>,
         });
       }
       continue;
@@ -288,6 +283,18 @@ ${JSON.stringify(data)}`,
   //console.log(util.inspect(events, { showHidden: false, depth: null, colors: false, maxArrayLength: null }))
   //console.log(JSON.stringify(events));
 
+  let gameMetadata: GameMetadata = {
+    events,
+    dannis,
+    uuid: mjsoulPaifu.head.uuid,
+    timestamp: timestamp.toISOString(),
+    day: `${timestamp.getFullYear()}年${timestamp.getMonth() + 1}月${timestamp.getDate()}日`,
+    playerNames,
+    ranks: ranks,
+    finalScores: finalScores,
+    teamPoints,
+    accountIds,
+  };
   return [events, gameMetadata];
 }
 

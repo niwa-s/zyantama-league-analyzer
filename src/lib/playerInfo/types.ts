@@ -1,8 +1,6 @@
 import { Stat } from "../stats";
 
-export type PlayerInfo = {
-  stat: Stat;
-  uuids: string[];
+export type PlayerInfoSlim = {
   team:
     | {
         type: "join";
@@ -13,6 +11,11 @@ export type PlayerInfo = {
       };
 };
 
+export type PlayerInfo = {
+  stat: Stat;
+  uuids: string[];
+} & PlayerInfoSlim;
+
 export type PlayerInfoAtom = {
-  [x: string]: PlayerInfo;
+  [x: string]: PlayerInfoSlim;
 };

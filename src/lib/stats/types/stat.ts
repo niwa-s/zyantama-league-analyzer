@@ -39,6 +39,7 @@ export type GameMetadata = {
   finalScores: number[];
   teamPoints: number[];
   accountIds: string[];
+  events: Event[];
 };
 type KyokuState = {
   kyoku?: string;
