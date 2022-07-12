@@ -1,4 +1,4 @@
-import { TrashIcon } from "@heroicons/react/solid";
+import { ArrowsExpandIcon, TrashIcon, XIcon } from "@heroicons/react/solid";
 import { useRecoilValue } from "recoil";
 import FileInputField from "../fileinput-field";
 import { GameDetail } from "../game-detail";
@@ -53,20 +53,34 @@ export function GameResult() {
             <tr className="border-b text-left" key={"game-result" + metadata.uuid}>
               <td className="">{metadata.day}</td>
               <td className="flex flex-wrap">
-                {metadata.playerNames.map((playerName) => (
+                {metadata.playerNames.map((playerName, playerId) => (
                   <div key={playerName} className="w-1/2">
-                    {playerName}
+                    {`[${metadata.dannis[playerId]}] ${playerName} [${metadata.finalScores[playerId]}]`}
                   </div>
                 ))}
               </td>
               <td>
-                <button
-                  onClick={() => {
-                    toggleShowGameDetail(metadata.uuid);
-                  }}
-                >
-                  詳細ページ
-                </button>
+                {showDetail ? (
+                  <button
+                    onClick={() => {
+                      toggleShowGameDetail(metadata.uuid);
+                    }}
+                    className="bg-red-500 py-2 pl-3 pr-4 rounded flex items-center text-white font-bold hover:bg-red-300"
+                  >
+                    <XIcon className="w-6 h-6 mr-2" />
+                    閉じる
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      toggleShowGameDetail(metadata.uuid);
+                    }}
+                    className="bg-blue-500 py-2 pl-3 pr-4 rounded flex items-center text-white font-bold hover:bg-blue-300"
+                  >
+                    <ArrowsExpandIcon className="w-6 h-6 mr-2" />
+                    詳細を見る
+                  </button>
+                )}
               </td>
               <td>
                 <button className="bg-red-500 py-2 pl-3 pr-4 rounded flex items-center text-white font-bold">

@@ -4,5 +4,13 @@ module.exports = {
   theme: {
     extend: {},
   },
+  safelist: [
+    {
+      // https://tailwindcss.com/docs/content-configuration#safelisting-classes
+      // テンプレートリテラルで使用する文字列をあらかじめ宣言する必要がある？(もっといい方法がありそう...)
+      pattern: /bg-(indigo|yellow|red|purple|pink|green|blue)-(200|500|700)/,
+      variants: ["hover"]
+    }
+  ],
   plugins: [],
 };

@@ -3,6 +3,7 @@ import { ArrayOfLength } from "../utils.js";
 import Event from "./types/event.js";
 import { GameMetadata } from "./types/stat.js";
 import { Tile, TileStr } from "./types/tile";
+import { danniIdToString } from "./utils";
 /*
 export const readFromFilePath = (filePath: string) => {
   let json = JSON.parse(fs.readFileSync(filePath, { encoding: 'utf-8' }))
@@ -47,12 +48,14 @@ function ConvertToMjaiFormat(mjsoulPaifu: any): [Event[], GameMetadata] {
   let ranks: ArrayOfLength<4, number> = [0, 0, 0, 0];
   let playerNames = accountsInfo.map((account: any) => account.nickname);
   let accountIds = accountsInfo.map((account: any) => account.account_id);
+  let dannis = accountsInfo.map((account: any) => danniIdToString(account.level.id));
   gameResult.players.forEach((player: any, rank: number) => {
     finalScores[player.seat] = player.part_point_1;
     ranks[player.seat] = rank;
   });
   let timestamp = new Date(Number(mjsoulPaifu.head.start_time) * 1000);
   let gameMetadata: GameMetadata = {
+    dannis,
     uuid: mjsoulPaifu.head.uuid,
     timestamp: timestamp.toISOString(),
     day: `${timestamp.getFullYear()}年${timestamp.getMonth() + 1}月${timestamp.getDate()}日`,

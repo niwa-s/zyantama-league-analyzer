@@ -26,4 +26,46 @@ function toPercentFormat(num: number, fixed?: number) {
   return (num * 100).toFixed(fixed).toString() + "%";
 }
 
-export { toPercentFormat, changToBakaze, kyokuInfoToString };
+export { toPercentFormat, changToBakaze, kyokuInfoToString, danniIdToString };
+
+function danniIdToString(id: number) {
+  console.log("danni: ", id)
+  switch (id) {
+    case 10101:
+      return "初心1";
+    case 10102:
+      return "初心2";
+    case 10103:
+      return "初心3";
+    case 10201:
+      return "雀士1";
+    case 10202:
+      return "雀士2";
+    case 10203:
+      return "雀士3";
+    case 10301:
+      return "雀傑1";
+    case 10302:
+      return "雀傑2";
+    case 10303:
+      return "雀傑3";
+    case 10401:
+      return "雀豪1";
+    case 10402:
+      return "雀豪2";
+    case 10403:
+      return "雀豪3";
+    case 10501:
+      return "雀聖1";
+    case 10502:
+      return "雀聖2";
+    case 10503:
+      return "雀聖3";
+    case 10601:
+      return "魂天";
+    default:
+      const kontenLevel = id % 100;
+      console.log("段位不明: ", id, `魂天${kontenLevel.toString()}として扱う`)
+      return `魂天${kontenLevel.toString()}`;
+  }
+}

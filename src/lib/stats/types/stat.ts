@@ -28,6 +28,7 @@ export type GameResult = {
   p4Score: string;
 };
 export type GameMetadata = {
+  dannis: string;
   uuid: string;
   timestamp: string;
   day: string;
