@@ -17,5 +17,5 @@ export type PlayerInfo = {
 } & PlayerInfoSlim;
 
 export type PlayerInfoAtom = {
-  [x: string]: PlayerInfoSlim;
+  [accountId: string]: PlayerInfoSlim;
 };
