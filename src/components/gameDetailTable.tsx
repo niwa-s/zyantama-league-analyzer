@@ -6,7 +6,10 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
+import { useRecoilValue } from "recoil";
 import { GameMetadata, GameResult, GameResultByPlayer } from "../lib/stats/types/stat";
+import { playerInfoState } from "@/lib/playerInfo/selectors";
+import { teamColorByTeamNameState } from "@/lib/teamInfo/selectors";
 import { classNames } from "@/lib/utils";
 
 type Person = {
@@ -61,33 +64,6 @@ function createData(playerResults: GameResultByPlayer[][]) {
   return gameResult;
 }
 function createPlayerFooter(playerId: number) {}
-
-const defaultData: Person[] = [
-  {
-    firstName: "tanner",
-    lastName: "linsley",
-    age: 24,
-    visits: 100,
-    status: "In Relationship",
-    progress: 50,
-  },
-  {
-    firstName: "tandy",
-    lastName: "miller",
-    age: 40,
-    visits: 40,
-    status: "Single",
-    progress: 80,
-  },
-  {
-    firstName: "joe",
-    lastName: "dirte",
-    age: 45,
-    visits: 20,
-    status: "Complicated",
-    progress: 10,
-  },
-];
 
 let day = " ";
 const gameTitle = "第4節 第2試合";
@@ -207,61 +183,6 @@ const columns: ColumnDef<GameResult>[] = [
   },
 ];
 
-const _columns: ColumnDef<Person>[] = [
-  {
-    header: "Name",
-    footer: (props) => props.column.id,
-    columns: [
-      {
-        accessorKey: "firstName",
-        cell: (info) => info.getValue(),
-        footer: (props) => props.column.id,
-      },
-      {
-        accessorFn: (row) => row.lastName,
-        id: "lastName",
-        cell: (info) => info.getValue(),
-        header: () => <span>Last Name</span>,
-        footer: (props) => props.column.id,
-      },
-    ],
-  },
-  {
-    header: "Info",
-    footer: (props) => props.column.id,
-    columns: [
-      {
-        accessorKey: "age",
-        header: () => "Age",
-        footer: (props) => props.column.id,
-        cell: (info) => <div className="text-right px-1">{info.getValue()}</div>,
-      },
-      {
-        header: "More Info",
-        columns: [
-          {
-            accessorKey: "visits",
-            header: () => <span>Visits</span>,
-            footer: (props) => props.column.id,
-            cell: (info) => <div className="text-right px-1">{info.getValue()}</div>,
-          },
-          {
-            accessorKey: "status",
-            header: "Status",
-            footer: (props) => props.column.id,
-          },
-          {
-            accessorKey: "progress",
-            header: "Profile Progress",
-            footer: (props) => props.column.id,
-            cell: (info) => <div className="text-right px-1">{info.getValue()}</div>,
-          },
-        ],
-      },
-    ],
-  },
-];
-
 type Props = {
   playerResults: GameResultByPlayer[][];
   metadata: GameMetadata;
@@ -281,29 +202,18 @@ function getResultColCss(val: string) {
       return "";
   }
 }
-function getPlayerTableHeaderCss(playerId: number) {
-  switch (playerId) {
-    case 1:
-      return "bg-red-100";
-    case 2:
-      return "bg-blue-100";
-    case 3:
-      return "bg-green-100";
-    case 4:
-      return "bg-yellow-100";
-    default:
-      return "";
-  }
-}
 
 function Table({ playerResults, metadata }: Props) {
+  const teamColorMap = useRecoilValue(teamColorByTeamNameState);
+  const playerInfo = useRecoilValue(playerInfoState);
   columns[0].header = metadata.day;
   columns[0].footer = "試合結果";
   for (const i of [0, 1, 2, 3]) {
+    const teamInfo = playerInfo[metadata.accountIds[i]].team;
+    columns[i + 1].header = teamInfo.type === "join" ? teamInfo.name : "未設定";
     columns[i + 1].columns![0].header = metadata.playerNames[i];
-    columns[i + 1].header = teamNames[i];
 
-    console.log("finalscores:", metadata.finalScores);
+    console.log("columns:", columns);
     columns[i + 1].footer = () => (
       <div>{`${metadata.ranks[i] + 1}着   ${metadata.teamPoints[i]}pts`}</div>
     );
@@ -327,20 +237,32 @@ function Table({ playerResults, metadata }: Props) {
             }
             return (
               <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header, i) => (
-                  <th
-                    key={header.id}
-                    colSpan={header.colSpan}
-                    className={classNames(
-                      "border-2 border-solid px-1 py-1 border-black bg-gray-200",
-                      header.depth <= 2 && getPlayerTableHeaderCss(i),
-                    )}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
-                  </th>
-                ))}
+                {headerGroup.headers.map((header, i) => {
+                  let headerColor = "gray";
+                  console.log("header: ", header);
+                  console.log("playerInfo: ", playerInfo);
+                  if (i >= 1 && i <= 4 && header.depth <= 2) {
+                    console.log("metadata element: ", metadata, i);
+                    let teamInfo = playerInfo[metadata.accountIds[i - 1]].team;
+                    headerColor =
+                      teamInfo.type === "join"
+                        ? teamColorMap.get(teamInfo.name)!.teamColor
+                        : "gray";
+                  }
+                  return (
+                    <th
+                      key={header.id}
+                      colSpan={header.colSpan}
+                      className={classNames(
+                        `border-2 border-solid px-1 py-1 border-black bg-${headerColor}-100`,
+                      )}
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(header.column.columnDef.header, header.getContext())}
+                    </th>
+                  );
+                })}
               </tr>
             );
           })}
