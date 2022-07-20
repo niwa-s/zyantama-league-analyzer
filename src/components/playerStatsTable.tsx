@@ -16,6 +16,7 @@ import { Stat } from "../lib/stats";
 import { toPercentFormat } from "../lib/stats/utils";
 import { playerInfoAtom } from "@/lib/playerInfo/atoms";
 import { playerInfoState } from "@/lib/playerInfo/selectors";
+import { teamInfoByTeamNameState } from "@/lib/teamInfo/selectors";
 import { classNames } from "@/lib/utils";
 
 type StatsTableType = {
@@ -139,20 +140,12 @@ const columns: ColumnDef<StatsTableType>[] = [
 
 function StatsTable() {
   const playerInfo = useRecoilValue(playerInfoState);
+  const teamColorMap = useRecoilValue(teamInfoByTeamNameState);
   /*for (const [_, pInfo] of Object.entries(playerInfo)) {
     const team = pInfo.team
     columns[0].cell = () => <div className="text-center">{team.type === "join" ? team.name : "未設定"}</div>
   }*/
-  console.log("[");
-  for (const { stat } of Object.values(playerInfo)) {
-    console.log(`{
-      accountId: ${stat.playerId},
-      teamName: "",
-      playerName: "${stat.playerName}",
-},
-    `);
-  }
-  console.log("]");
+
   const [sorting, setSorting] = useState<SortingState>([]);
   const [data, setData] = useState<StatsTableType[]>(() => {
     let playerInfos = Object.entries(playerInfo).map(([_, s]) => s);
@@ -247,14 +240,28 @@ function StatsTable() {
         <tbody>
           {table.getRowModel().rows.map((row) => (
             <tr key={row.id} className="odd:bg-gray-100">
-              {row.getVisibleCells().map((cell) => (
-                <td
-                  key={cell.id}
-                  className={classNames("border", "border-solid", "text-right", "px-2")}
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
+              {row.getVisibleCells().map((cell) => {
+                console.log("row:", row.original?.teamName);
+                let teamColor = teamColorMap.get(row.original?.teamName!)?.teamColor;
+                return (
+                  <td
+                    key={cell.id}
+                    className={classNames(
+                      "border",
+                      "border-solid",
+                      "text-right",
+                      "px-2",
+                      `${
+                        (cell.column.columnDef.header === "チーム名" ||
+                          cell.column.columnDef.header === "選手名") &&
+                        `bg-${teamColor}-100`
+                      }`,
+                    )}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                );
+              })}
             </tr>
           ))}
         </tbody>

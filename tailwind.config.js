@@ -8,9 +8,12 @@ module.exports = {
     {
       // https://tailwindcss.com/docs/content-configuration#safelisting-classes
       // テンプレートリテラルで使用する文字列をあらかじめ宣言する必要がある？(もっといい方法がありそう...)
-      pattern: /bg-(indigo|yellow|red|purple|pink|green|blue)-(200|500|700)/,
+      pattern: /bg-(indigo|yellow|red|purple|pink|green|blue)-(100|200|500|700)/,
       variants: ["hover"],
     },
+    {
+      pattern: /text-(indigo|yellow|red|purple|pink|green|blue)-(500|800)/,
+    }
   ],
   plugins: [],
 };

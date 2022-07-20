@@ -1,12 +1,14 @@
 import { ArrowsExpandIcon, TrashIcon, XIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useRecoilValue } from "recoil";
+import { Batch } from "../Batch";
 import FileInputField from "../fileinput-field";
 import { GameDetail } from "../game-detail";
 import { useAddPaifu, useRemovePaifu, useToggleShowGameDetail } from "@/lib/gameInfo/operations";
 import { gameInfoState } from "@/lib/gameInfo/selectors";
 import { playerInfoAtom } from "@/lib/playerInfo/atoms";
 import { useUpdatePlayerStats } from "@/lib/playerInfo/operations";
+import { playerInfoState } from "@/lib/playerInfo/selectors";
 import { ConvertToMjaiFormat } from "@/lib/stats";
 import { useSampleData } from "@/lib/useSampleData";
 
@@ -14,12 +16,11 @@ export function GameResult() {
   const [SampleButton] = useSampleData();
   //const { pinfoDispatch, pinfoState } = useContext(PlayerInfoContext);
   const removePaifu = useRemovePaifu();
-  const playerInfo = useRecoilValue(playerInfoAtom);
+  const playerInfo = useRecoilValue(playerInfoState);
   const updatePlayerStats = useUpdatePlayerStats();
   const addPaifu = useAddPaifu();
   const toggleShowGameDetail = useToggleShowGameDetail();
   const gameInfo = useRecoilValue(gameInfoState);
-  console.log("pstorestate:", playerInfo);
   const useHandleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.currentTarget as HTMLInputElement;
     const files = target.files!;
@@ -47,9 +48,9 @@ export function GameResult() {
             <tr className="border-b text-left" key={"game-result" + metadata.uuid}>
               <td className="">{metadata.day}</td>
               <td className="flex flex-wrap">
-                {metadata.playerNames.map((playerName, playerId) => (
-                  <div key={playerName} className="w-1/2">
-                    {`[${metadata.dannis[playerId]}] ${playerName} [${metadata.finalScores[playerId]}]`}
+                {metadata.playerNames.map((playerName, i) => (
+                  <div key={playerName} className={`w-1/2`}>
+                    {`[${metadata.dannis[i]}]`} {playerName} {`[${metadata.finalScores[i]}]`}
                   </div>
                 ))}
               </td>
