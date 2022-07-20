@@ -14,7 +14,7 @@ export const playerInfoState = selector({
       [accountId: string]: PlayerInfo;
     } = {};
     const playerStats = get(playerStatsByAccountIdState);
-    const teamColor = get(teamInfoByTeamNameState)
+    const teamColor = get(teamInfoByTeamNameState);
     for (const [accountId, { team }] of Object.entries(playerInfoSlim)) {
       const uuids = get(gameInfoByAccountIdState(accountId)).map((metadata) => metadata.uuid);
       if (uuids.length === 0) continue;
@@ -77,7 +77,6 @@ export const playerInfoByTeamNameState = selector({
     return playerInfoByTeamName;
   },
 });
-
 
 // チームごとのプレイヤーの情報を取得する
 

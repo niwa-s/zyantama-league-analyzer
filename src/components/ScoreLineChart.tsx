@@ -36,7 +36,6 @@ const ScoreLineChart = ({ playerResults, metadata }: Props) => {
     }
   }
 
-
   // 5:3
   return (
     //<ResponsiveContainer width="70%" height={500}>
@@ -110,7 +109,7 @@ const ScoreLineChart = ({ playerResults, metadata }: Props) => {
           <Label
             position="right"
             value={scores[scores.length - 1].scores[2]}
-            style={{ fill:  teamColorToHex(playerColors[2]!) }}
+            style={{ fill: teamColorToHex(playerColors[2]!) }}
           />
         }
         strokeWidth={0}
