@@ -5,7 +5,7 @@ export const teamInfoState = selector({
   key: "teamInfo",
   get: ({ get }) => get(teamInfoAtom),
 });
-export const teamColorByTeamNameState = selector({
+export const teamInfoByTeamNameState = selector({
   key: "teamColorByTeamName",
   get: ({ get }) => {
     const teamInfo = get(teamInfoAtom);

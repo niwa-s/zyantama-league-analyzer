@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { GameMetadata, GameResult, GameResultByPlayer } from "../lib/stats/types/stat";
 import { playerInfoState } from "@/lib/playerInfo/selectors";
-import { teamColorByTeamNameState } from "@/lib/teamInfo/selectors";
+import { teamInfoByTeamNameState } from "@/lib/teamInfo/selectors";
 import { classNames } from "@/lib/utils";
 
 type Person = {
@@ -204,7 +204,7 @@ function getResultColCss(val: string) {
 }
 
 function Table({ playerResults, metadata }: Props) {
-  const teamColorMap = useRecoilValue(teamColorByTeamNameState);
+  const teamColorMap = useRecoilValue(teamInfoByTeamNameState);
   const playerInfo = useRecoilValue(playerInfoState);
   columns[0].header = metadata.day;
   columns[0].footer = "試合結果";

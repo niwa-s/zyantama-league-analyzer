@@ -1,8 +1,10 @@
 import { selector, selectorFamily } from "recoil";
 import { gameInfoByAccountIdState, gameInfoByUuidState } from "../gameInfo/selectors";
 import { Stat, GameResultByPlayer } from "../stats";
+import { teamInfoByTeamNameState } from "../teamInfo/selectors";
 import { playerInfoAtom } from "./atoms";
 import { PlayerInfo } from "./types";
+import { TeamColor } from "@/components/team-score/TeamAddForm";
 
 export const playerInfoState = selector({
   key: "playerInfo",
@@ -12,6 +14,7 @@ export const playerInfoState = selector({
       [accountId: string]: PlayerInfo;
     } = {};
     const playerStats = get(playerStatsByAccountIdState);
+    const teamColor = get(teamInfoByTeamNameState)
     for (const [accountId, { team }] of Object.entries(playerInfoSlim)) {
       const uuids = get(gameInfoByAccountIdState(accountId)).map((metadata) => metadata.uuid);
       if (uuids.length === 0) continue;
@@ -19,6 +22,7 @@ export const playerInfoState = selector({
         team,
         stat: playerStats[accountId],
         uuids,
+        teamColor: team.type === "join" ? teamColor.get(team.name)?.teamColor : undefined,
       };
     }
     return playerInfos;
@@ -73,6 +77,7 @@ export const playerInfoByTeamNameState = selector({
     return playerInfoByTeamName;
   },
 });
+
 
 // チームごとのプレイヤーの情報を取得する
 

@@ -16,7 +16,7 @@ import { Stat } from "../lib/stats";
 import { toPercentFormat } from "../lib/stats/utils";
 import { playerInfoAtom } from "@/lib/playerInfo/atoms";
 import { playerInfoState } from "@/lib/playerInfo/selectors";
-import { teamColorByTeamNameState } from "@/lib/teamInfo/selectors";
+import { teamInfoByTeamNameState } from "@/lib/teamInfo/selectors";
 import { classNames } from "@/lib/utils";
 
 type StatsTableType = {
@@ -140,7 +140,7 @@ const columns: ColumnDef<StatsTableType>[] = [
 
 function StatsTable() {
   const playerInfo = useRecoilValue(playerInfoState);
-  const teamColorMap = useRecoilValue(teamColorByTeamNameState);
+  const teamColorMap = useRecoilValue(teamInfoByTeamNameState);
   /*for (const [_, pInfo] of Object.entries(playerInfo)) {
     const team = pInfo.team
     columns[0].cell = () => <div className="text-center">{team.type === "join" ? team.name : "未設定"}</div>

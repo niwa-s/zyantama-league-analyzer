@@ -11,6 +11,9 @@ module.exports = {
       pattern: /bg-(indigo|yellow|red|purple|pink|green|blue)-(100|200|500|700)/,
       variants: ["hover"],
     },
+    {
+      pattern: /text-(indigo|yellow|red|purple|pink|green|blue)-(500|800)/,
+    }
   ],
   plugins: [],
 };
