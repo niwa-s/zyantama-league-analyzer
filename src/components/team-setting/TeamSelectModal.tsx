@@ -19,7 +19,7 @@ export function TeamSelectModal({ accountId }: Props) {
         <div className="overflow-hidden rounded-lg shadow-lg ring-1  ring-black ring-opacity-5">
           <div className="relative grid gap-2 bg-white p-7">
             <div className="text-center">チームを選択してください</div>
-            {[...teamInfo.teamNames.values()].map(({ teamName, teamColor }) => (
+            {[...teamInfo.values()].map(({ teamName, teamColor }) => (
               <button
                 onClick={() => joinTeam(accountId, teamName)}
                 key={teamName}

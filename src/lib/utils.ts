@@ -1,4 +1,4 @@
-import { TeamColor } from "@/components/team-score/TeamAddForm";
+import { TeamColor } from "@/components/team-setting/TeamAddForm";
 
 // 参考: https://qiita.com/uhyo/items/3bc5f951f922804ede51
 type ArrayOfLength<N extends number, T> = ArrayOfLengthRec<N, T, []>;
@@ -17,16 +17,16 @@ export const classNames = (...classes: (string | undefined | boolean | null)[]) 
 
 export function teamColorToHex(color: TeamColor) {
   if (color === "red") {
-    return "#EF4444"
+    return "#EF4444";
   } else if (color === "indigo") {
-    return "#6366f1"
+    return "#6366f1";
   } else if (color === "green") {
-    return "#22c55e"
+    return "#22c55e";
   } else if (color === "pink") {
-    return "#ec4899"
+    return "#ec4899";
   } else if (color === "purple") {
-    return "#a855f7"
+    return "#a855f7";
   } else {
-    return "#eab308"
+    return "#eab308";
   }
 }

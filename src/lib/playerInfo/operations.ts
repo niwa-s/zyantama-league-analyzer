@@ -29,7 +29,7 @@ export const useJoinTeam = () =>
     let playerInfo: PlayerInfoSlim = { team: { type: "unjoin" } };
 
     let teams = snapshot.getLoadable<TeamInfoAtom>(teamInfoAtom).contents;
-    if (teams.teamNames.get(teamName)) {
+    if (teams.get(teamName)) {
       playerInfo.team = { type: "join", name: teamName };
       set(playerInfoAtom, () => ({
         ...preState,
@@ -37,4 +37,3 @@ export const useJoinTeam = () =>
       }));
     }
   });
-

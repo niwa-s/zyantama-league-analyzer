@@ -13,7 +13,7 @@ module.exports = {
     },
     {
       pattern: /text-(indigo|yellow|red|purple|pink|green|blue)-(500|800)/,
-    }
+    },
   ],
   plugins: [],
 };

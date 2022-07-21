@@ -1,5 +1,5 @@
 import { Stat } from "../stats";
-import { TeamColor } from "@/components/team-score/TeamAddForm";
+import { TeamColor } from "@/components/team-setting/TeamAddForm";
 
 export type PlayerInfoSlim = {
   team:
