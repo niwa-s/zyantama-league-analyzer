@@ -4,7 +4,7 @@ import { useJoinTeam, useUpdatePlayerStats } from "./playerInfo/operations";
 import { playerInfoState } from "./playerInfo/selectors";
 import { ConvertToMjaiFormat } from "./stats";
 import { useAddTeam } from "./teamInfo/operations";
-import { TeamColor } from "@/components/team-score/TeamAddForm";
+import { TeamColor } from "@/components/team-setting/TeamAddForm";
 
 const teams: { name: string; color: TeamColor }[] = [
   {

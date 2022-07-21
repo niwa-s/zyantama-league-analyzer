@@ -12,7 +12,6 @@ const TeamBoard = () => {
   const unJoinPlayerInfo = useRecoilValue(TeamUnJoinPlayerInfoState);
   return (
     <div className="w-full">
-      <TeamStatsTable />
       <table>
         <thead className="border-b">
           <tr className="text-left">

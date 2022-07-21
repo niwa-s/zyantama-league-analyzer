@@ -4,36 +4,25 @@ import { useRecoilValue } from "recoil";
 import { GameMetadata, GameResultByPlayer } from "../lib/stats/types/stat";
 import { TeamColor } from "./team-setting/TeamAddForm";
 import { playerInfoState } from "@/lib/playerInfo/selectors";
+import { teamInfoState, teamScoresState } from "@/lib/teamInfo/selectors";
 import { teamColorToHex } from "@/lib/utils";
 
-type Props = {
-  playerResults: GameResultByPlayer[][];
-  metadata: GameMetadata;
-};
-
-const ScoreLineChart = ({ playerResults, metadata }: Props) => {
+const TeamScoreLineChart = () => {
+  const [scores, gamelabels, teamOrders] = useRecoilValue(teamScoresState);
+  console.log("scores", scores);
   const playerInfo = useRecoilValue(playerInfoState);
-  let scores = [{ scores: [25000, 25000, 25000, 25000], roundInfo: "" }];
-  for (let i = 0; i < playerResults[0].length; i++) {
-    scores.push({
-      scores: [0, 1, 2, 3].map((pId) => playerResults[pId][i].score),
-      roundInfo: playerResults[0][i].kyoku!.slice(0, 2),
+  const teamInfo = useRecoilValue(teamInfoState);
+  const teamInfos = [...teamInfo].map(([teamName, teamInfo]) => ({
+    teamName: teamName,
+    teamColor: teamInfo.teamColor,
+  }));
+  console.log("teamInfos:", teamInfos);
+  let chartInfo = [{ scores: Array(teamInfo.size).fill(0), gamelabels: "" }];
+  for (let i = 0; i < scores.length; i++) {
+    chartInfo.push({
+      scores: scores[i],
+      gamelabels: gamelabels[i],
     });
-  }
-
-  for (let i = scores.length - 1; i > 1; i--) {
-    if (scores[i].roundInfo === scores[i - 1].roundInfo) {
-      scores[i].roundInfo = "";
-    }
-  }
-  let playerColors = metadata.accountIds.map((accountId) => playerInfo[accountId].teamColor);
-  for (let i of [0, 1, 2, 3]) {
-    for (const color of ["red", "indigo", "green", "yellow"] as TeamColor[]) {
-      if (!playerColors[i] && playerColors.filter((c) => c === color).length === 0) {
-        playerColors[i] = color;
-        break;
-      }
-    }
   }
 
   // 5:3
@@ -41,19 +30,54 @@ const ScoreLineChart = ({ playerResults, metadata }: Props) => {
     //<ResponsiveContainer width="70%" height={500}>
     <LineChart
       className="mx-auto"
-      width={900}
+      width={1000}
       height={500}
-      data={scores}
+      data={chartInfo}
       margin={{
         top: 20,
-        right: 80,
+        right: 100,
         left: 20,
         bottom: 20,
       }}
     >
       <YAxis />
       <CartesianGrid horizontal={false} />
-      <Line
+      {teamInfos.map(({ teamName, teamColor }, i) => {
+        return (
+          <Line
+            key={teamName}
+            dataKey={`scores[${i}]`}
+            name={teamOrders[i]}
+            stroke={teamColorToHex(teamColor)}
+            dot={false}
+            strokeWidth={5}
+          />
+        );
+      })}
+      {teamInfos.map((teamInfo, i) => (
+        <ReferenceLine
+          key={teamInfo.teamName}
+          y={chartInfo[chartInfo.length - 1].scores[i]}
+          label={
+            <Label
+              position="right"
+              value={chartInfo[chartInfo.length - 1].scores[i].toFixed(1)}
+              style={{ fill: teamColorToHex(teamInfo.teamColor) }}
+            />
+          }
+          strokeWidth={0}
+        />
+      ))}
+
+      <XAxis dataKey={"gamelabels"} />
+      <Legend />
+    </LineChart>
+    //</ResponsiveContainer>
+  );
+};
+export default TeamScoreLineChart;
+/*
+<Line
         name={metadata.playerNames[0]}
         dataKey={"scores[0]"}
         stroke={teamColorToHex(playerColors[0]!)}
@@ -81,6 +105,8 @@ const ScoreLineChart = ({ playerResults, metadata }: Props) => {
         dot={false}
         strokeWidth={5}
       />
+      
+
       <ReferenceLine
         y={scores[scores.length - 1].scores[0]}
         label={
@@ -125,10 +151,4 @@ const ScoreLineChart = ({ playerResults, metadata }: Props) => {
         }
         strokeWidth={0}
       />
-      <XAxis dataKey={"roundInfo"} />
-      <Legend />
-    </LineChart>
-    //</ResponsiveContainer>
-  );
-};
-export default ScoreLineChart;
+*/

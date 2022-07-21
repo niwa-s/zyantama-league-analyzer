@@ -5,7 +5,7 @@ import { teamInfoAtom } from "../teamInfo/atoms";
 import { teamInfoState } from "../teamInfo/selectors";
 import { playerInfoAtom } from "./atoms";
 import { PlayerInfo } from "./types";
-import { TeamColor } from "@/components/team-score/TeamAddForm";
+import { TeamColor } from "@/components/team-setting/TeamAddForm";
 
 export const playerInfoState = selector({
   key: "playerInfo",

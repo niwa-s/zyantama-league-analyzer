@@ -1,4 +1,4 @@
-import { TeamColor } from "@/components/team-score/TeamAddForm";
+import { TeamColor } from "@/components/team-setting/TeamAddForm";
 
 // 参考: https://qiita.com/uhyo/items/3bc5f951f922804ede51
 type ArrayOfLength<N extends number, T> = ArrayOfLengthRec<N, T, []>;
