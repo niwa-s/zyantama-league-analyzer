@@ -1,5 +1,6 @@
 import { TrashIcon } from "@heroicons/react/solid";
 import { useRecoilValue } from "recoil";
+import TeamStatsTable from "../TeamStatsTable";
 import { TeamAddForm } from "./TeamAddForm";
 import { TeamSelectModal } from "./TeamSelectModal";
 import { playerInfoByTeamNameState, TeamUnJoinPlayerInfoState } from "@/lib/playerInfo/selectors";
@@ -11,6 +12,7 @@ const TeamBoard = () => {
   const unJoinPlayerInfo = useRecoilValue(TeamUnJoinPlayerInfoState);
   return (
     <div className="w-full">
+      <TeamStatsTable />
       <table>
         <thead className="border-b">
           <tr className="text-left">
@@ -18,14 +20,14 @@ const TeamBoard = () => {
             <th>メンバー</th>
           </tr>
         </thead>
-        {[...teamInfo.teamNames.values()].map(({ teamName, teamColor }) => (
+        {[...teamInfo.values()].map(({ teamName, teamColor }) => (
           <tbody key={teamName} className="border-b">
             <tr>
               <td className={`bg-${teamColor}-200 text-black px-2 text-center`}>{teamName}</td>
               <td>
                 {joinPlayerInfo.get(teamName)?.map((playerInfo) => (
-                  <div className="flex" key={playerInfo.playerId}>
-                    <div className="p-1">{playerInfo.playerName}</div>
+                  <div className="flex" key={playerInfo.stat.playerId}>
+                    <div className="p-1">{playerInfo.stat.playerName}</div>
                     <button className="bg-red-500 my-1 px-1 rounded flex items-center text-white font-bold">
                       <TrashIcon className="w-5 h-5" />
                     </button>

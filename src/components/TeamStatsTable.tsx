@@ -20,7 +20,6 @@ import { teamInfoState } from "@/lib/teamInfo/selectors";
 import { classNames } from "@/lib/utils";
 
 type StatsTableType = {
-  teamName: string;
   playerName: string;
   teampoint: number;
   game: number;
@@ -39,14 +38,15 @@ type StatsTableType = {
 const columns: ColumnDef<StatsTableType>[] = [
   {
     header: "チーム名",
-    accessorKey: "teamName",
+    accessorKey: "playerName",
     cell: (info) => <div className="text-center">{info.getValue()}</div>,
   },
+  /*
   {
     header: "選手名",
     accessorKey: "playerName",
     cell: (info) => <div className="text-center">{info.getValue()}</div>,
-  },
+  },*/
   {
     header: "ポイント",
     accessorKey: "teampoint",
@@ -138,7 +138,7 @@ const columns: ColumnDef<StatsTableType>[] = [
   },
 ];
 
-function PlayerStatsTable() {
+function TeamStatsTable() {
   const playerInfo = useRecoilValue(playerInfoState);
   const teamInfo = useRecoilValue(teamInfoState);
   /*for (const [_, pInfo] of Object.entries(playerInfo)) {
@@ -148,7 +148,7 @@ function PlayerStatsTable() {
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [data, setData] = useState<StatsTableType[]>(() => {
-    let playerInfos = Object.entries(playerInfo).map(([_, s]) => s);
+    let playerInfos = [...teamInfo].map(([_, tInfo]) => tInfo);
     return playerInfos.map(
       ({
         stat: {
@@ -167,9 +167,7 @@ function PlayerStatsTable() {
           houjuuRate,
           avgPointPerHoujuu,
         },
-        team,
       }) => ({
-        teamName: team.type === "join" ? team.name : "未設定",
         playerName,
         teampoint,
         game,
@@ -241,8 +239,7 @@ function PlayerStatsTable() {
           {table.getRowModel().rows.map((row) => (
             <tr key={row.id} className="odd:bg-gray-100">
               {row.getVisibleCells().map((cell) => {
-                console.log("row:", row.original?.teamName);
-                let teamColor = teamInfo.get(row.original?.teamName!)?.teamColor;
+                let teamColor = teamInfo.get(row.original?.playerName!)?.teamColor;
                 return (
                   <td
                     key={cell.id}
@@ -270,4 +267,4 @@ function PlayerStatsTable() {
   );
 }
 
-export default PlayerStatsTable;
+export default TeamStatsTable;

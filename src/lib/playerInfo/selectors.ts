@@ -1,7 +1,8 @@
 import { selector, selectorFamily } from "recoil";
 import { gameInfoByAccountIdState, gameInfoByUuidState } from "../gameInfo/selectors";
 import { Stat, GameResultByPlayer } from "../stats";
-import { teamInfoByTeamNameState } from "../teamInfo/selectors";
+import { teamInfoAtom } from "../teamInfo/atoms";
+import { teamInfoState } from "../teamInfo/selectors";
 import { playerInfoAtom } from "./atoms";
 import { PlayerInfo } from "./types";
 import { TeamColor } from "@/components/team-score/TeamAddForm";
@@ -14,7 +15,7 @@ export const playerInfoState = selector({
       [accountId: string]: PlayerInfo;
     } = {};
     const playerStats = get(playerStatsByAccountIdState);
-    const teamColor = get(teamInfoByTeamNameState);
+    const teamInfo = get(teamInfoAtom);
     for (const [accountId, { team }] of Object.entries(playerInfoSlim)) {
       const uuids = get(gameInfoByAccountIdState(accountId)).map((metadata) => metadata.uuid);
       if (uuids.length === 0) continue;
@@ -22,7 +23,7 @@ export const playerInfoState = selector({
         team,
         stat: playerStats[accountId],
         uuids,
-        teamColor: team.type === "join" ? teamColor.get(team.name)?.teamColor : undefined,
+        teamColor: team.type === "join" ? teamInfo.get(team.name)?.teamColor : undefined,
       };
     }
     return playerInfos;
@@ -65,20 +66,18 @@ export const playerInfoByTeamNameState = selector({
   key: "playerInfoByTeamName",
   get: ({ get }) => {
     const playerInfos = get(playerInfoState);
-    const playerInfoByTeamName = new Map<string, Stat[]>();
+    const playerInfoByTeamName = new Map<string, PlayerInfo[]>();
     Object.values(playerInfos).forEach((playerInfo) => {
       if (playerInfo.team.type === "join") {
         if (!playerInfoByTeamName.has(playerInfo.team.name)) {
           playerInfoByTeamName.set(playerInfo.team.name, []);
         }
-        playerInfoByTeamName.get(playerInfo.team.name)!.push(playerInfo.stat);
+        playerInfoByTeamName.get(playerInfo.team.name)!.push(playerInfo);
       }
     });
     return playerInfoByTeamName;
   },
 });
-
-// チームごとのプレイヤーの情報を取得する
 
 type GameDetailByUuidParams = {
   UUID: string;
