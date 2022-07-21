@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { TeamLabel } from "../TeamLabel";
 import { ColorSelector } from "./colorSelector";
-import { useJoinTeam } from "@/lib/playerInfo/operations";
+import { Batch } from "@/components/Batch";
 import { useAddTeam } from "@/lib/teamInfo/operations";
 
 export type TeamColor = "indigo" | "yellow" | "red" | "purple" | "pink" | "green";
@@ -17,6 +17,7 @@ export const TeamAddForm = () => {
   return (
     <div className="flex border-b">
       {/*<TeamLabel teamColor="black" teamName={teamName} />*/}
+      <Batch color={selectedTeamColor} name={teamName} />
       <input
         className="focus:outline-none"
         type="text"

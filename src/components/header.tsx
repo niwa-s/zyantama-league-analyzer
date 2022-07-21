@@ -8,7 +8,7 @@ const Header = () => {
     <header className="border-b flex items-center h-14 px-4 space-x-4">
       <h1>
         <Link href="/">
-          <a className="text-2xl font-logo">雀魂データ分析</a>
+          <a className="text-2xl font-logo">雀魂リーグ分析</a>
         </Link>
       </h1>
       <span className="flex-1"></span>

@@ -4,11 +4,8 @@ import { useJoinTeam, useUpdatePlayerStats } from "./playerInfo/operations";
 import { playerInfoState } from "./playerInfo/selectors";
 import { ConvertToMjaiFormat } from "./stats";
 import { useAddTeam } from "./teamInfo/operations";
-import { TeamColor } from "@/components/team-score/TeamAddForm";
+import { TeamColor } from "@/components/team-setting/TeamAddForm";
 
-type useSampleDataReturnType = [() => JSX.Element];
-//よくわからない(https://vercel.com/guides/loading-static-file-nextjs-api-route)
-const fetcher = (url: any) => fetch(url).then((res) => res.json());
 const teams: { name: string; color: TeamColor }[] = [
   {
     name: "アキレス",
@@ -72,6 +69,9 @@ const fileNames: string[] = [
   "mahjongsoul_paifu_220704-1a8972e8-6c0f-4c8d-9e4f-f1225cee421f.json",
   "mahjongsoul_paifu_220704-3035b7e8-89af-40d5-8ee7-645a002e953d.json",
   "mahjongsoul_paifu_220704-ea2cdae9-08a6-4c31-bf6d-c6dd45f21623.json",
+  "mahjongsoul_paifu_220719-52a6fcaa-50fb-48bc-8405-104937068752.json",
+  "mahjongsoul_paifu_220719-949307d5-d508-4ad1-bc6c-6f6c3a7ceaba.json",
+  "mahjongsoul_paifu_220719-a8cb8a72-86f6-425a-ab6b-572b8290868b.json",
 ];
 
 export const useSampleData = () => {

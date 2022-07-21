@@ -1,4 +1,5 @@
 import { Stat } from "../stats";
+import { TeamColor } from "@/components/team-setting/TeamAddForm";
 
 export type PlayerInfoSlim = {
   team:
@@ -14,6 +15,7 @@ export type PlayerInfoSlim = {
 export type PlayerInfo = {
   stat: Stat;
   uuids: string[];
+  teamColor?: TeamColor;
 } & PlayerInfoSlim;
 
 export type PlayerInfoAtom = {
