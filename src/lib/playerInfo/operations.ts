@@ -37,3 +37,17 @@ export const useJoinTeam = () =>
       }));
     }
   });
+export const useUnJoinTeam = () =>
+  useRecoilCallback(({ set, snapshot }) => (accountId: string) => {
+    let preState = snapshot.getLoadable<PlayerInfoAtom>(playerInfoAtom).contents;
+    if (!preState[accountId]) {
+      return;
+    }
+
+    let playerInfo: PlayerInfoSlim = { team: { type: "unjoin" } };
+
+    set(playerInfoAtom, () => ({
+      ...preState,
+      [accountId]: playerInfo,
+    }));
+  });
