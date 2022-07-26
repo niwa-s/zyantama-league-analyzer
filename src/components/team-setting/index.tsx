@@ -3,11 +3,14 @@ import { useRecoilValue } from "recoil";
 import TeamStatsTable from "../TeamStatsTable";
 import { TeamAddForm } from "./TeamAddForm";
 import { TeamSelectModal } from "./TeamSelectModal";
+import { useUnJoinTeam } from "@/lib/playerInfo/operations";
 import { playerInfoByTeamNameState, TeamUnJoinPlayerInfoState } from "@/lib/playerInfo/selectors";
 import { teamInfoState } from "@/lib/teamInfo/selectors";
 
 const TeamBoard = () => {
   const teamInfo = useRecoilValue(teamInfoState);
+  console.log("teamInfo:", teamInfo);
+  const unjoinTeam = useUnJoinTeam();
   const joinPlayerInfo = useRecoilValue(playerInfoByTeamNameState);
   const unJoinPlayerInfo = useRecoilValue(TeamUnJoinPlayerInfoState);
   return (
@@ -27,7 +30,10 @@ const TeamBoard = () => {
                 {joinPlayerInfo.get(teamName)?.map((playerInfo) => (
                   <div className="flex" key={playerInfo.stat.playerId}>
                     <div className="p-1">{playerInfo.stat.playerName}</div>
-                    <button className="bg-red-500 my-1 px-1 rounded flex items-center text-white font-bold">
+                    <button
+                      className="bg-red-500 my-1 px-1 rounded flex items-center text-white font-bold hover:bg-red-300"
+                      onClick={() => unjoinTeam(playerInfo.stat.playerId)}
+                    >
                       <TrashIcon className="w-5 h-5" />
                     </button>
                   </div>

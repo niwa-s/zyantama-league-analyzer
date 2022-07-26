@@ -13,10 +13,11 @@ export const teamInfoState = selector({
     const playerInfoByTeamName = get(playerInfoByTeamNameState);
     for (const { teamName, teamColor } of teamInfoSlim.values()) {
       const playerInfos = playerInfoByTeamName.get(teamName);
-      if (!playerInfos) continue;
       let stat = new Stat();
-      for (const playerInfo of playerInfos) {
-        stat = Stat.add(stat, playerInfo.stat);
+      if (playerInfos) {
+        for (const playerInfo of playerInfos) {
+          stat = Stat.add(stat, playerInfo.stat);
+        }
       }
       stat.playerName = teamName;
       teamInfo.set(teamName, {
