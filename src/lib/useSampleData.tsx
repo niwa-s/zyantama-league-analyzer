@@ -72,6 +72,9 @@ const fileNames: string[] = [
   "mahjongsoul_paifu_220719-52a6fcaa-50fb-48bc-8405-104937068752.json",
   "mahjongsoul_paifu_220719-949307d5-d508-4ad1-bc6c-6f6c3a7ceaba.json",
   "mahjongsoul_paifu_220719-a8cb8a72-86f6-425a-ab6b-572b8290868b.json",
+  "mahjongsoul_paifu_220801-1a090eaf-77bf-4b0a-9309-026dabf790bd.json",
+  "mahjongsoul_paifu_220801-10cc9bca-273f-4510-9a6f-cfc1e8e41884.json",
+  "mahjongsoul_paifu_220801-13cd582a-3a6b-47b5-8d23-766d4cb8a3c9.json",
 ];
 
 export const useSampleData = () => {
